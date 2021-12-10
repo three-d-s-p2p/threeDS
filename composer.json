@@ -1,0 +1,25 @@
+{
+    "name": "larangogon/three-d-s",
+    "description": "threeDS place to pay",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Larangogon\\ThreeDS\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Larangogon\\ThreeDS\\Tests\\": "tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "larangogon",
+            "email": "larangogon1@uniminuto.edu.co"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
