@@ -2,6 +2,7 @@
 
 namespace Larangogon\ThreeDS\Traits;
 
+use App\Models\Token;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
@@ -168,7 +169,6 @@ trait ProcessableTrait
         }
     }
 
-
     /**
      * @param $response
      * @param $data
@@ -219,25 +219,21 @@ trait ProcessableTrait
         return new Client();
     }
 
-
-    public function sum($one, $three)
-    {
-        return $one + $three;
-    }
-
-
     /**
      * @param array $data
      * @param int $size
      */
     public function arrayInsert(array $data, int $size)
     {
-        /**
-         * array_push($this->datas, $data);
+        array_push($this->datas, $data);
         if (count($this->datas) === $size) {
         Token::insert($this->datas);
         $this->datas = [];
         }
-         */
+    }
+
+    public function sum($one, $three)
+    {
+        return $one + $three;
     }
 }
