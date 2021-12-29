@@ -4,31 +4,29 @@ namespace Larangogon\ThreeDS\Traits;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 
 trait ProcessableTrait
 {
-    protected $pids = [];
-    protected $datas = [];
+    protected array $pids = [];
+    protected array $datas = [];
 
     /**
      * @param $data
      * @param string $emailName
+     * @param string $token
      * @return void
      * @throws Exception
      */
-    protected function authorization($data, string $emailName)
+    protected function authorization($data, string $emailName, string $token)
     {
         try {
             $initial = microtime(true );
-
             $perPage = $data->count();
-
             do {
                 $references = $data->toBase()->cursor();
-
-                $this->chunkInputData($references, $emailName);
-
+                $this->chunkInputData($references, $emailName, $token);
                 $size = $references->count();
             } while ($size = !$perPage);
 
@@ -51,13 +49,14 @@ trait ProcessableTrait
     /**
      * @param $references
      * @param string $emailName
+     * @param string $token
      * @return void
      * @throws Exception
      */
-    protected function chunkInputData($references, string $emailName)
+    protected function chunkInputData($references, string $emailName, string $token)
     {
         try {
-            $references->chunk(500)->each(function ($chunk) use ($emailName) {
+            $references->chunk(500)->each(function ($chunk) use ($token, $emailName) {
                 if (count($this->pids) >= 20) {
                     $pid = pcntl_waitpid(-1, $status);
                     unset($this->pids[$pid]);
@@ -70,7 +69,7 @@ trait ProcessableTrait
                 } elseif ($pid) {
                     $this->pids[] = $pid;
                 } else {
-                    $this->create($chunk, $emailName);
+                    $this->create($chunk, $emailName, $token);
                     exit();
                 }
             });
@@ -107,10 +106,10 @@ trait ProcessableTrait
      * @return void
      * @throws Exception
      */
-    public function create($references, $emailName)
+    public function create($references, $emailName, string $token)
     {
         foreach ($references as $data) {
-            $response = $this->request($data, $emailName);
+            $response = $this->request($data, $emailName, $token);
             $this->response($response, $data, count($references));
         }
     }
@@ -118,17 +117,18 @@ trait ProcessableTrait
     /**
      * @param $data
      * @param string $emailName
+     * @param string $token
      * @return mixed|void
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function request($data, string $emailName)
+    public function request($data, string $emailName, string $token)
     {
         //data type objet
         try {
             $response = $this->getClient()->post('https://3dss-test.placetopay.com/api/v1/merchants', [
                 'json' => [
                     'Accept' => "string",
-                    'Authorization' => "token",
+                    'Authorization' => $token,
                     'name' => "EGM Ingenieria sin frondteras",
                     'brand' => "placetopay",
                     'country' => "COL",

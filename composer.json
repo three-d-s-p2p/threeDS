@@ -27,12 +27,12 @@
         "phpunit/phpunit": "^9.5",
         "guzzlehttp/guzzle": "^7.3",
         "ext-pcntl": "*",
-        "ext-gnupg": "*",
         "ext-pdo": "*",
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "symfony/http-client": "^5.1",
-        "easy-http/layer-contracts": "^0.2"
+        "easy-http/layer-contracts": "^0.2",
+        "laravel/framework": "^8.77"
     },
     "require-dev": {
         "sebastian/resource-operations": "^3.0",

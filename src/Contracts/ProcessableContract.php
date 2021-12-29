@@ -4,5 +4,5 @@ namespace Larangogon\ThreeDS\Contracts;
 
 interface ProcessableContract
 {
-    public function process($data,$emailName): void;
+    public function process($data, string $emailName, string $token): void;
 }
