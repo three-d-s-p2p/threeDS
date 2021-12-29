@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Larangogon\ThreeDS\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

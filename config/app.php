@@ -135,7 +135,7 @@ return [
     */
 
     'providers' => [
-        App\Providers\AppServiceProvider::class,
-        App\Providers\PackageThreeDSProvider::class,
+        Larangogon\ThreeDS\Providers\AppServiceProvider::class,
+        Larangogon\ThreeDS\Providers\PackageThreeDSProvider::class,
     ],
 ];

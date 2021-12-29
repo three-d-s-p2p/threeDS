@@ -12,13 +12,12 @@ class processThreeDS
     /**
      * @param $data
      * @param string $emailName
-     * @param $token
+     * @param string $token
      * @return void
      */
-    public function createRequest($data, string $emailName, $token)
-   {
-       $threeDS = new ThreeDSConcrete();
-       $threeDS->process($data,$emailName, $token);
-   }
-
+    public function createRequest($data, string $emailName, string $token)
+    {
+        $threeDS = new ThreeDSConcrete();
+        $threeDS->process($data, $emailName, $token);
+    }
 }
