@@ -8,7 +8,7 @@ Which allows the creation of businesses, branches, subscriptions and returns the
 
 #### The following parameters are required
 - data: object :: information to process.
-###### Example: iinformation imported from a file for mass management
+    ###### Example: iinformation imported from a file for mass management
 
         $data = [
             [
@@ -54,10 +54,10 @@ Which allows the creation of businesses, branches, subscriptions and returns the
         ];
 
 - emailName: string :: Email of the person who will be notified if an error occurs
-###### Example: larangogon2@gmail.com
+    ###### Example: larangogon2@gmail.com
 - token: string:: The authentication token which will be generated from the IT area.
-######-Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
-###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
+  ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
+    ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
 
 ## Mass consumption by means of wires, in parallel 
 
