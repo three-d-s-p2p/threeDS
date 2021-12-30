@@ -4,7 +4,6 @@ namespace Larangogon\ThreeDS;
 
 use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
-use Exception;
 
 class processThreeDS
 {
@@ -13,13 +12,12 @@ class processThreeDS
     /**
      * @param $data
      * @param string $emailName
+     * @param string $token
      * @return void
-     * @throws Exception
      */
-    public function createRequest($data, string $emailName)
-   {
-       $threeDS = new ThreeDSConcrete();
-       $threeDS->process($data,$emailName);
-   }
-
+    public function createRequest($data, string $emailName, string $token)
+    {
+        $threeDS = new ThreeDSConcrete();
+        $threeDS->process($data, $emailName, $token);
+    }
 }

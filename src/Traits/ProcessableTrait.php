@@ -4,46 +4,51 @@ namespace Larangogon\ThreeDS\Traits;
 
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
+use Larangogon\ThreeDS\Models\Token;
 
 trait ProcessableTrait
 {
-    protected $pids = [];
-    protected $datas = [];
+    protected array $pids = [];
+    protected array $datas = [];
 
     /**
      * @param $data
      * @param string $emailName
+     * @param string $token
      * @return void
      * @throws Exception
      */
-    protected function authorization($data, string $emailName)
+    protected function authorization($data, string $emailName, string $token)
     {
         try {
-            $initial = microtime(true );
-
+            $initial = microtime(true);
             $perPage = $data->count();
-
             do {
                 $references = $data->toBase()->cursor();
-
-                $this->chunkInputData($references, $emailName);
-
+                $this->chunkInputData($references, $emailName, $token);
                 $size = $references->count();
             } while ($size = !$perPage);
 
             logger()->channel('stack')
-                ->info('Completed process', [
+                ->info(
+                    'Completed process',
+                    [
                     'Final time' => microtime(true) - $initial,
                     'Memory' => (memory_get_usage() / 1024) / 1024 . ' MB',
-                ]);
+                    ]
+                );
 
             while (pcntl_waitpid(0, $status) != -1);
         } catch (Exception $e) {
             logger()->channel('stack')
-                ->info('Error authorization', [
+                ->info(
+                    'Error authorization',
+                    [
                     'Error ' => $e->getMessage(),
-                ]);
+                    ]
+                );
             $this->emailError($e, $emailName);
         }
     }
@@ -51,29 +56,32 @@ trait ProcessableTrait
     /**
      * @param $references
      * @param string $emailName
+     * @param string $token
      * @return void
      * @throws Exception
      */
-    protected function chunkInputData($references, string $emailName)
+    protected function chunkInputData($references, string $emailName, string $token)
     {
         try {
-            $references->chunk(500)->each(function ($chunk) use ($emailName) {
-                if (count($this->pids) >= 20) {
-                    $pid = pcntl_waitpid(-1, $status);
-                    unset($this->pids[$pid]);
-                }
+            $references->chunk(500)->each(
+                function ($chunk) use ($token, $emailName) {
+                    if (count($this->pids) >= 20) {
+                        $pid = pcntl_waitpid(-1, $status);
+                        unset($this->pids[$pid]);
+                    }
 
-                $pid = pcntl_fork();
+                    $pid = pcntl_fork();
 
-                if ($pid == -1 || $pid === null) {
-                    exit("Error forking...\n");
-                } elseif ($pid) {
-                    $this->pids[] = $pid;
-                } else {
-                    $this->create($chunk, $emailName);
-                    exit();
+                    if ($pid == -1 || $pid === null) {
+                        exit("Error forking...\n");
+                    } elseif ($pid) {
+                        $this->pids[] = $pid;
+                    } else {
+                        $this->create($chunk, $emailName, $token);
+                        exit();
+                    }
                 }
-            });
+            );
 
             foreach ($this->pids as $pid) {
                 pcntl_waitpid($pid, $status);
@@ -81,9 +89,12 @@ trait ProcessableTrait
             }
         } catch (Exception $e) {
             logger()->channel('stack')
-                ->info('Error chunkInputData', [
+                ->info(
+                    'Error chunkInputData',
+                    [
                     'Error ' => $e->getMessage(),
-                ]);
+                    ]
+                );
             $this->emailError($e, $emailName);
         }
     }
@@ -103,14 +114,15 @@ trait ProcessableTrait
 
     /**
      * @param $references
-     * @param $emailName
+     * @param string $emailName
+     * @param string $token
      * @return void
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function create($references, $emailName)
+    public function create($references, string $emailName, string $token)
     {
         foreach ($references as $data) {
-            $response = $this->request($data, $emailName);
+            $response = $this->request($data, $emailName, $token);
             $this->response($response, $data, count($references));
         }
     }
@@ -118,56 +130,59 @@ trait ProcessableTrait
     /**
      * @param $data
      * @param string $emailName
+     * @param string $token
      * @return mixed|void
-     * @throws Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function request($data, string $emailName)
+    public function request($data, string $emailName, string $token)
     {
         //data type objet
         try {
-            $response = $this->getClient()->post('https://3dss-test.placetopay.com/api/v1/merchants', [
+            $response = $this->getClient()->post(
+                'https://3dss-test.placetopay.com/api/v1/merchants',
+                [
                 'json' => [
-                    'Accept' => "string",
-                    'Authorization' => "token",
-                    'name' => "EGM Ingenieria sin frondteras",
-                    'brand' => "placetopay",
-                    'country' => "COL",
-                    'currency' => "COP",
+                    'Accept' => 'string',
+                    'Authorization' => $token,
+                    'name' => 'EGM Ingenieria sin frondteras',
+                    'brand' => 'placetopay',
+                    'country' => 'COL',
+                    'currency' => 'COP',
                     'document' => [
-                        'type' => "RUT",
-                        'number' => "123456789-0"
+                        'type' => 'RUT',
+                        'number' => '123456789-0'
                     ],
-                    "url" => "https://www.placetopay.com",
-                    "mcc" => 742,
-                    "isicClass" => 111,
+                    'url' => 'https://www.placetopay.com',
+                    'mcc' => 742,
+                    'isicClass' => 111,
 
-                    "branch"=> [
-                        "name" => "Oficina principal",
-                        "brand" => "placetopay uno",
-                        "country" => "COL",
-                        "currency" => "COP"
+                    'branch' => [
+                        'name' => 'Oficina principal',
+                        'brand' => 'placetopay uno',
+                        'country' => 'COL',
+                        'currency' => 'COP'
                     ],
-                    "subscriptions" => [
+                    'subscriptions' => [
                         [
-                            "franchise" => 1,
-                            "acquirerBIN" => 12345678910,
-                            "version" => 2
+                            'franchise' => 1,
+                            'acquirerBIN' => 12345678910,
+                            'version' => 2
                         ]
                     ],
-                    "invitations" => [
+                    'invitations' => [
                         [
-                            "admin@admin.com" => null
+                            'admin@admin.com' => null
                         ]
                     ]
                 ]
-            ]);
+                ]
+            );
 
             return json_decode($response->getBody()->getContents());
         } catch (Exception $e) {
             $this->emailError($e, $emailName);
         }
     }
-
 
     /**
      * @param $response
@@ -181,30 +196,30 @@ trait ProcessableTrait
         //validar que retorna
 
         switch ($status) {
-            case "OK": //200
+            case 'OK': //200
                 $dataToken = [
-                    "token" => $response->data,
-                    "message" => null,
-                    "code" => null,
-                    "error" => null
+                    'token' => $response->data,
+                    'message' => null,
+                    'code' => null,
+                    'error' => null
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case "ERROR": // cuando retorna error
+            case 'ERROR': // cuando retorna error
                 $dataToken = [
-                    "token" => null,
-                    "message" => $response->status->message,
-                    "code" => $response->status->code,
-                    "error" => null
+                    'token' => null,
+                    'message' => $response->status->message,
+                    'code' => $response->status->code,
+                    'error' => null
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case "FAILED":
+            case 'FAILED':
                 $dataToken = [
-                    "token" => null,
-                    "message" => $response->message,
-                    "code" => null,
-                    "error" => null
+                    'token' => null,
+                    'message' => $response->message,
+                    'code' => null,
+                    'error' => null
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
@@ -219,25 +234,21 @@ trait ProcessableTrait
         return new Client();
     }
 
-
-    public function sum($one, $three)
-    {
-        return $one + $three;
-    }
-
-
     /**
      * @param array $data
      * @param int $size
      */
     public function arrayInsert(array $data, int $size)
     {
-        /**
-         * array_push($this->datas, $data);
+        array_push($this->datas, $data);
         if (count($this->datas) === $size) {
-        Token::insert($this->datas);
-        $this->datas = [];
+            Token::insert($this->datas);
+            $this->datas = [];
         }
-         */
+    }
+
+    public function sum($one, $three)
+    {
+        return $one + $three;
     }
 }

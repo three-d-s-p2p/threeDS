@@ -5,7 +5,7 @@ namespace Larangogon\ThreeDS\Tests;
 use Larangogon\ThreeDS\processThreeDS;
 use PHPUnit\Framework\TestCase;
 
-class calculationTest extends TestCase
+class ProcessTest extends TestCase
 {
     /**
      * @test
@@ -13,7 +13,7 @@ class calculationTest extends TestCase
     public function sum()
     {
         $count = new processThreeDS();
-        $sum = $count->sum(7,9);
+        $sum = $count->sum(7, 9);
         $this->assertSame(16, $sum);
     }
 }
