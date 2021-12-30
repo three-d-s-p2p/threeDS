@@ -1,6 +1,7 @@
 #3ds IMP Operaciones 
+
 ##Scope
-Created with the purpose of improving the process and streamlining the requirements process in the operations area.
+ - Created with the purpose of improving the process and streamlining the requirements process in the operations area.
 
 ##Methods
 - ### createRequest
