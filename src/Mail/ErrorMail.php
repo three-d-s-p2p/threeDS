@@ -19,7 +19,7 @@ class ErrorMail extends Mailable
      * @param $emailName
      * @param $error
      */
-    public function __construct( $emailName, $error)
+    public function __construct($emailName, $error)
     {
         $this->emailName = $emailName;
         $this->error = $error;
@@ -32,9 +32,11 @@ class ErrorMail extends Mailable
     {
         return $this->from($this->emailName)
             ->view('mails.error')
-            ->with([
+            ->with(
+                [
                 'date' => Carbon::now(),
                 'error' => $this->error,
-            ]);
+                ]
+            );
     }
 }

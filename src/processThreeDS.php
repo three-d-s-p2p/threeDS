@@ -20,4 +20,9 @@ class processThreeDS
         $threeDS = new ThreeDSConcrete();
         $threeDS->process($data, $emailName, $token);
     }
+
+    public function update()
+    {
+        //Actualizacion de sucursales, no se evidencia proceso en documentacion
+    }
 }

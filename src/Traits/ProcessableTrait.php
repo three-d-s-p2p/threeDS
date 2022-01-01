@@ -4,6 +4,7 @@ namespace Larangogon\ThreeDS\Traits;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
@@ -117,7 +118,7 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return void
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function create($references, string $emailName, string $token)
     {
@@ -132,7 +133,7 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return mixed|void
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function request($data, string $emailName, string $token)
     {
@@ -245,10 +246,5 @@ trait ProcessableTrait
             Token::insert($this->datas);
             $this->datas = [];
         }
-    }
-
-    public function sum($one, $three)
-    {
-        return $one + $three;
     }
 }
