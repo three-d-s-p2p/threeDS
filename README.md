@@ -1,13 +1,12 @@
+## 3ds IMP Operaciones 
 
-# 3ds IMP Operaciones 
+### Scope
 
-## Scope
  - Created with the purpose of improving the process and streamlining the requirements process in the operations area.
-_______________________________________
-## Usage
+
+### Usage
 ### Methods
-- ### createRequest
-Which allows the creation of businesses, branches, subscriptions and returns the token which will be liked in the migration (table) Tokens.
+- createRequest
 
 #### The following parameters are required
 - data: object :: information to process.
@@ -54,3 +53,4 @@ _______________________________________________
 ## Installation
 ______________________________________________
 ## Required parameters
+
