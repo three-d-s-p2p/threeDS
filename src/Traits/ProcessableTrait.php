@@ -5,6 +5,7 @@ namespace Larangogon\ThreeDS\Traits;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
@@ -32,24 +33,21 @@ trait ProcessableTrait
                 $size = $references->count();
             } while ($size = !$perPage);
 
-            logger()->channel('stack')
-                ->info(
-                    'Completed process',
-                    [
+            Log::info(
+                'Completed process',
+                [
                     'Final time' => microtime(true) - $initial,
                     'Memory' => (memory_get_usage() / 1024) / 1024 . ' MB',
-                    ]
-                );
-
+                ]
+            );
             while (pcntl_waitpid(0, $status) != -1);
         } catch (Exception $e) {
-            logger()->channel('stack')
-                ->info(
-                    'Error authorization',
-                    [
+            Log::error(
+                'Error authorization',
+                [
                     'Error ' => $e->getMessage(),
                     ]
-                );
+            );
             $this->emailError($e, $emailName);
         }
     }
@@ -59,7 +57,7 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return void
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     protected function chunkInputData($references, string $emailName, string $token)
     {
@@ -89,13 +87,12 @@ trait ProcessableTrait
                 unset($this->pids[$pid]);
             }
         } catch (Exception $e) {
-            logger()->channel('stack')
-                ->info(
-                    'Error chunkInputData',
-                    [
+            Log::error(
+                'Error chunkInputData',
+                [
                     'Error ' => $e->getMessage(),
                     ]
-                );
+            );
             $this->emailError($e, $emailName);
         }
     }
@@ -110,7 +107,7 @@ trait ProcessableTrait
     {
         $email = new ErrorMail($emailName, $error);
         Mail::to($emailName)->send($email);
-        throw new Exception('emailImportGeneral');
+        throw new Exception('email General Error Process');
     }
 
     /**
