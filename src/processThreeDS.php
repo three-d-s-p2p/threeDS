@@ -2,6 +2,7 @@
 
 namespace Larangogon\ThreeDS;
 
+use Illuminate\Database\Eloquent\Collection;
 use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 

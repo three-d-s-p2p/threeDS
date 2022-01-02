@@ -13,6 +13,9 @@ return [
     |
     */
 
+    'email' => env('EMAIL'),
+    'token' => env('TOKEN'),
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

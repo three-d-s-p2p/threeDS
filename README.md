@@ -3,7 +3,8 @@
 ##Scope
  - Created with the purpose of improving the process and streamlining the requirements process in the operations area.
 
-##Methods
+##Usage
+###Methods
 - ### createRequest
 Which allows the creation of businesses, branches, subscriptions and returns the token which will be liked in the migration (table) Tokens.
 
@@ -11,48 +12,25 @@ Which allows the creation of businesses, branches, subscriptions and returns the
 - data: object :: information to process.
     ###### Example: iinformation imported from a file for mass management
 
-        $data = [
-            [
+        $data =  $data = Data::all();
+
+- Required (fields)
+
                 'name' => 'EGM Ingenieria sin frondteras',
                 'brand' => 'placetopay',
-                'country' => 'COL',
-                'currency' => 'COP',
-                'document' => 
                 'type' => 'RUT',
                 'number' => '123456789-0',
                 'url' => 'https://www.placetopay.com',
                 'mcc' => 742,
                 'isicClass' => 111,
                 'nameBranch' => 'Oficina principal',
-                'brand' => 'placetopay uno',
                 'country' => 'COL',
                 'currency' => 'COP',
                 'franchise' => 1,
                 'acquirerBIN' => 12345678910,
                 'version' => 2,
                 'invitations' => null
-            ],
-            [
-                'name' => 'EGM Ingenieria sin frondteras',
-                'brand' => 'placetopay',
-                'country' => 'COL',
-                'currency' => 'COP',
-                'document' =>
-                'type' => 'RUT',
-                'number' => '123456789-0',
-                'url' => 'https://www.placetopay.com',
-                'mcc' => 742,
-                'isicClass' => 111,
-                'name' => 'Oficina principal',
-                'brand' => 'placetopay uno',
-                'country' => 'COL',
-                'currency' => 'COP',
-                'franchise' => 1,
-                'acquirerBIN' => 12345678910,
-                'version' => 2,
-                'invitations' => null
-            ]
-        ];
+           
 
 - emailName: string :: Email of the person who will be notified if an error occurs
     ###### Example: larangogon2@gmail.com
@@ -67,3 +45,5 @@ Which allows the creation of businesses, branches, subscriptions and returns the
 data will be divided by chunk of 500 with capacity of 20 threads
 
 - The methods of this library can be overwritten
+
+##Installation

@@ -13,14 +13,17 @@ class CreateTokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('tokens', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('token', 64)->nullable();
-            $table->string('message', 300)->nullable();
-            $table->string('code')->nullable();
-            $table->string('error')->nullable();
-            $table->timestamps();
-        });
+        Schema::create(
+            'tokens',
+            function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('token', 64)->nullable();
+                $table->string('message', 300)->nullable();
+                $table->string('code')->nullable();
+                $table->string('error')->nullable();
+                $table->timestamps();
+            }
+        );
     }
 
     /**

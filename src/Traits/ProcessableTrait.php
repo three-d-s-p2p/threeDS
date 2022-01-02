@@ -236,10 +236,11 @@ trait ProcessableTrait
     }
 
     /**
-     * @param array $data
+     * @param $data
      * @param int $size
+     * @return void
      */
-    public function arrayInsert(array $data, int $size)
+    public function arrayInsert($data, int $size)
     {
         array_push($this->datas, $data);
         if (count($this->datas) === $size) {
