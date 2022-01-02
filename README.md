@@ -1,10 +1,11 @@
-#3ds IMP Operaciones 
 
-##Scope
+# 3ds IMP Operaciones 
+
+## Scope
  - Created with the purpose of improving the process and streamlining the requirements process in the operations area.
-
-##Usage
-###Methods
+_______________________________________
+## Usage
+### Methods
 - ### createRequest
 Which allows the creation of businesses, branches, subscriptions and returns the token which will be liked in the migration (table) Tokens.
 
@@ -38,6 +39,9 @@ Which allows the creation of businesses, branches, subscriptions and returns the
   ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
     ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
 
+- ### Update
+__________________________________
+
 ## Mass consumption by means of wires, in parallel 
 
 - By consuming the createRequest method, we start a process which begins with authorization and processing in threads.
@@ -45,5 +49,8 @@ Which allows the creation of businesses, branches, subscriptions and returns the
 data will be divided by chunk of 500 with capacity of 20 threads
 
 - The methods of this library can be overwritten
+_______________________________________________
 
-##Installation
+## Installation
+______________________________________________
+## Required parameters
