@@ -48,9 +48,22 @@ __________________________________
 data will be divided by chunk of 500 with capacity of 20 threads
 
 - The methods of this library can be overwritten
+
+
+      abstract protected function chunkInputData($references, string $emailName, string $token);
+      abstract protected function authorization($data, string $emailName, string $token);
+      abstract protected function emailError($error, string $emailName);
+      abstract protected function create($references, string $emailName, string $token);
+      abstract protected function request($data, string $emailName, string $token);
+      abstract protected function response($response, $data, int $size);
+      abstract protected function arrayInsert(array $data, int $size);
+      abstract protected function update($references, string $emailName, string $token);
+      abstract protected function responseUpdate($response);
+    
+
+
 _______________________________________________
 
 ## Installation
-______________________________________________
-## Required parameters
+
 
