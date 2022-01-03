@@ -23,55 +23,6 @@ class ProcessTest extends TestCase
         $this->token = env('TOKEN', '234567dfghjfgh567');
     }
 
-
-    /**
-     * @test
-     */
-    public function createRequest()
-    {
-        $data = collect(
-            [
-                [
-                    'id' => 1,
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'type' => 'RUT',
-                    'number' => '123456789-0',
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
-                    'nameBranch' => 'Oficina principal',
-                    'franchise' => 1,
-                    'acquirerBIN' => 12345678910,
-                    'version' => 2,
-                    'invitations' => null
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'type' => 'RUT',
-                    'number' => '123456789-0',
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
-                    'nameBranch' => 'Oficina principal',
-                    'franchise' => 1,
-                    'acquirerBIN' => 12345678910,
-                    'version' => 2,
-                    'invitations' => null
-                ]
-            ]
-        );
-
-        $threeDS = new ThreeDSConcrete();
-        $threeDS->process($data, $this->emailName, $this->token);
-    }
-
     /**
      * @test
      */
