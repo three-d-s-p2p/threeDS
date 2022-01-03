@@ -13,8 +13,10 @@ abstract class ProcessTemplate implements ProcessableContract
     abstract protected function request($data, string $emailName, string $token);
     abstract protected function response($response, $data, int $size);
     abstract protected function arrayInsert(array $data, int $size);
+    abstract protected function update($references, string $emailName, string $token);
+    abstract protected function responseUpdate($response);
 
-    public function process($data, $emailName, string $token): void
+    public function process($data, string $emailName, string $token): void
     {
         $this->authorization($data, $emailName, $token);
     }

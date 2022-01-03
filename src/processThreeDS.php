@@ -2,8 +2,8 @@
 
 namespace Larangogon\ThreeDS;
 
-use Illuminate\Database\Eloquent\Collection;
 use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
+use Larangogon\ThreeDS\Concrete\ThreeDSUpdateConcrete;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 
 class processThreeDS
@@ -22,8 +22,9 @@ class processThreeDS
         $threeDS->process($data, $emailName, $token);
     }
 
-    public function update()
+    public function update($data, string $emailName, string $token)
     {
-        //Actualizacion de sucursales, no se evidencia proceso en documentacion
+        $threeDS = new ThreeDSUpdateConcrete();
+        $threeDS->process($data, $emailName, $token);
     }
 }

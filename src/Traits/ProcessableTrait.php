@@ -5,9 +5,11 @@ namespace Larangogon\ThreeDS\Traits;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
+use Psr\Http\Message\ResponseInterface;
 
 trait ProcessableTrait
 {
@@ -19,37 +21,27 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return void
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     protected function authorization($data, string $emailName, string $token)
     {
         try {
             $initial = microtime(true);
-            $perPage = $data->count();
-            do {
-                $references = $data->toBase()->cursor();
-                $this->chunkInputData($references, $emailName, $token);
-                $size = $references->count();
-            } while ($size = !$perPage);
+            $this->chunkInputData($data, $emailName, $token);
 
-            logger()->channel('stack')
-                ->info(
-                    'Completed process',
-                    [
+            Log::info(
+                'Completed process',
+                [
                     'Final time' => microtime(true) - $initial,
                     'Memory' => (memory_get_usage() / 1024) / 1024 . ' MB',
-                    ]
-                );
-
+                ]
+            );
             while (pcntl_waitpid(0, $status) != -1);
         } catch (Exception $e) {
-            logger()->channel('stack')
-                ->info(
-                    'Error authorization',
-                    [
-                    'Error ' => $e->getMessage(),
-                    ]
-                );
+            Log::error(
+                'Error authorization',
+                [ 'Error ' => $e ]
+            );
             $this->emailError($e, $emailName);
         }
     }
@@ -59,14 +51,14 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return void
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     protected function chunkInputData($references, string $emailName, string $token)
     {
         try {
             $references->chunk(500)->each(
                 function ($chunk) use ($token, $emailName) {
-                    if (count($this->pids) >= 20) {
+                    if (count($this->pids) >= 10) {
                         $pid = pcntl_waitpid(-1, $status);
                         unset($this->pids[$pid]);
                     }
@@ -89,13 +81,10 @@ trait ProcessableTrait
                 unset($this->pids[$pid]);
             }
         } catch (Exception $e) {
-            logger()->channel('stack')
-                ->info(
-                    'Error chunkInputData',
-                    [
-                    'Error ' => $e->getMessage(),
-                    ]
-                );
+            Log::error(
+                'Error chunkInputData',
+                [ 'Error ' => $e->getMessage() ]
+            );
             $this->emailError($e, $emailName);
         }
     }
@@ -110,7 +99,7 @@ trait ProcessableTrait
     {
         $email = new ErrorMail($emailName, $error);
         Mail::to($emailName)->send($email);
-        throw new Exception('emailImportGeneral');
+        throw new Exception('email General Error Process');
     }
 
     /**
@@ -132,14 +121,14 @@ trait ProcessableTrait
      * @param $data
      * @param string $emailName
      * @param string $token
-     * @return mixed|void
+     * @return ResponseInterface|void
      * @throws GuzzleException
      */
     public function request($data, string $emailName, string $token)
     {
-        //data type objet
+      //data type objet
         try {
-            $response = $this->getClient()->post(
+            return $this->getClient()->post(
                 'https://3dss-test.placetopay.com/api/v1/merchants',
                 [
                 'json' => [
@@ -178,8 +167,6 @@ trait ProcessableTrait
                 ]
                 ]
             );
-
-            return json_decode($response->getBody()->getContents());
         } catch (Exception $e) {
             $this->emailError($e, $emailName);
         }
@@ -193,37 +180,39 @@ trait ProcessableTrait
      */
     public function response($response, $data, int $size)
     {
-        $status = $response->status->status;
-        //validar que retorna
+        $status = $response->getStatusCode();
+        dump($status);
 
         switch ($status) {
-            case 'OK': //200
+            case 200:
                 $dataToken = [
-                    'token' => $response->data,
+                    'token' => $response,
                     'message' => null,
                     'code' => null,
                     'error' => null
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case 'ERROR': // cuando retorna error
+            case '401':
                 $dataToken = [
                     'token' => null,
                     'message' => $response->status->message,
                     'code' => $response->status->code,
-                    'error' => null
+                    'error' => 'No autenticado'
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case 'FAILED':
+            case '422':
                 $dataToken = [
                     'token' => null,
-                    'message' => $response->message,
-                    'code' => null,
-                    'error' => null
+                    'message' => $response->status->message,
+                    'code' => $response->status->code,
+                    'error' => 'Mensajes de validación de datos'
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
+            default:
+                return $response->getStatusCode();
         }
     }
 
@@ -242,10 +231,73 @@ trait ProcessableTrait
      */
     public function arrayInsert($data, int $size)
     {
-        array_push($this->datas, $data);
-        if (count($this->datas) === $size) {
-            Token::insert($this->datas);
-            $this->datas = [];
+        try {
+            array_push($this->datas, $data);
+            if (count($this->datas) === $size) {
+                Token::insert($this->datas);
+                $this->datas = [];
+            }
+        } catch (Exception $e) {
+            Log::error(
+                'Error arrayInsert',
+                [ 'Error ' => $e->getMessage() ]
+            );
+        }
+    }
+
+    /**
+     * @param $references
+     * @param string $emailName
+     * @param string $token
+     * @return void
+     * @throws GuzzleException
+     */
+    public function update($references, string $emailName, string $token)
+    {
+        foreach ($references as $data) {
+            $response = $this->request($data, $emailName, $token);
+            $this->responseUpdate($response);
+        }
+    }
+
+    /**
+     * @param $response
+     * @return array|mixed
+     */
+    public function responseUpdate($response)
+    {
+        $status = $response->getStatusCode();
+
+        switch ($status) {
+            case 200:
+                return $response;
+                break;
+            case '401':
+                return [
+                    'token' => null,
+                    'message' => $response->status->message,
+                    'code' => $response->getStatusCode(),
+                    'error' => 'No autenticado'
+                ];
+                break;
+            case '422':
+                return [
+                    'token' => null,
+                    'message' => $response->status->message,
+                    'code' => $response->getStatusCode(),
+                    'error' => 'Mensajes de validación de datos'
+                ];
+                break;
+            case '404':
+                return [
+                    'token' => null,
+                    'message' => $response->status->message,
+                    'code' => $response->getStatusCode(),
+                    'error' => 'El comercio no existe'
+                ];
+                break;
+            default:
+                return $response->getStatusCode();
         }
     }
 }

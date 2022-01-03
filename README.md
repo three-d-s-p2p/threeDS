@@ -7,7 +7,6 @@
 ### Usage
 ### Methods
 - createRequest
-Which allows the creation of businesses, branches, subscriptions and returns the token which will be liked in the migration (table) Tokens.
 
 #### The following parameters are required
 - data: object :: information to process.
@@ -39,6 +38,9 @@ Which allows the creation of businesses, branches, subscriptions and returns the
   ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
     ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
 
+- ### Update
+__________________________________
+
 ## Mass consumption by means of wires, in parallel 
 
 - By consuming the createRequest method, we start a process which begins with authorization and processing in threads.
@@ -47,4 +49,21 @@ data will be divided by chunk of 500 with capacity of 20 threads
 
 - The methods of this library can be overwritten
 
-##Installation
+
+      abstract protected function chunkInputData($references, string $emailName, string $token);
+      abstract protected function authorization($data, string $emailName, string $token);
+      abstract protected function emailError($error, string $emailName);
+      abstract protected function create($references, string $emailName, string $token);
+      abstract protected function request($data, string $emailName, string $token);
+      abstract protected function response($response, $data, int $size);
+      abstract protected function arrayInsert(array $data, int $size);
+      abstract protected function update($references, string $emailName, string $token);
+      abstract protected function responseUpdate($response);
+    
+
+
+_______________________________________________
+
+## Installation
+
+
