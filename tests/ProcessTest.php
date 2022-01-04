@@ -2,9 +2,7 @@
 
 namespace Larangogon\ThreeDS\Tests;
 
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Mail;
-use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\processThreeDS;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
@@ -70,7 +68,6 @@ class ProcessTest extends TestCase
         $threeDS->createRequest($data, $this->emailName, $this->token);
     }
 
-
     /**
      * @test
      */
@@ -83,52 +80,5 @@ class ProcessTest extends TestCase
         Mail::to($this->emailName)->send($email);
 
         Mail::assertSent(ErrorMail::class);
-    }
-
-    /**
-     * @test
-     * @throws GuzzleException
-     */
-    public function status()
-    {
-        $data = collect(
-            [
-                [
-                    'id' => 1,
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'type' => 'RUT',
-                    'number' => '123456789-0',
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
-                    'nameBranch' => 'Oficina principal',
-                    'franchise' => 1,
-                    'acquirerBIN' => 12345678910,
-                    'version' => 2,
-                    'invitations' => null
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'type' => 'RUT',
-                    'number' => '123456789-0',
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
-                    'nameBranch' => 'Oficina principal',
-                    'franchise' => 1,
-                    'acquirerBIN' => 12345678910,
-                    'version' => 2,
-                    'invitations' => null
-                ]
-            ]
-        );
-        $response = $this->request($data, $this->emailName, $this->token);
     }
 }

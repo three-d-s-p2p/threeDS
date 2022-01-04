@@ -126,48 +126,50 @@ trait ProcessableTrait
      */
     public function request($data, string $emailName, string $token)
     {
-      //data type objet
         try {
             return $this->getClient()->post(
                 'https://3dss-test.placetopay.com/api/v1/merchants',
                 [
-                'json' => [
-                    'Accept' => 'string',
-                    'Authorization' => $token,
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'document' => [
-                        'type' => 'RUT',
-                        'number' => '123456789-0'
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => $token
                     ],
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
+                    'json' => [
+                        'name' => $data->name,
+                        'brand' => $data->brand,
+                        'country' => $data->country,
+                        'currency' => $data->currency,
+                        'document' => [
+                            'type' => $data->type,
+                            'number' => $data->number
+                        ],
+                        'url' => $data->url,
+                        'mcc' => $data->mcc,
+                        'isicClass' => $data->isicClass,
 
-                    'branch' => [
-                        'name' => 'Oficina principal',
-                        'brand' => 'placetopay uno',
-                        'country' => 'COL',
-                        'currency' => 'COP'
-                    ],
-                    'subscriptions' => [
-                        [
-                            'franchise' => 1,
-                            'acquirerBIN' => 12345678910,
-                            'version' => 2
-                        ]
-                    ],
-                    'invitations' => [
-                        [
-                            'admin@admin.com' => null
+                        'branch' => [
+                            'name' => $data->nameBranch,
+                            'brand' => $data->brand,
+                            'country' => $data->country,
+                            'currency' => $data->currency,
+                        ],
+                        'subscriptions' => [
+                            [
+                                'franchise' => $data->franchise,
+                                'acquirerBIN' => $data->acquirerBIN,
+                                'version' => $data->version
+                            ]
+                        ],
+                        'invitations' => [
+                            [
+                                'admin@admin.com' => $data->invitations
+                            ]
                         ]
                     ]
                 ]
-                ]
             );
         } catch (Exception $e) {
+            echo $e;
             $this->emailError($e, $emailName);
         }
     }
@@ -181,7 +183,8 @@ trait ProcessableTrait
     public function response($response, $data, int $size)
     {
         $status = $response->getStatusCode();
-        dump($status);
+        $res = $response->getBody()->getContents();
+        $response = json_decode($res);
 
         switch ($status) {
             case 200:
