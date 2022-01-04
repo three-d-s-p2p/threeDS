@@ -131,43 +131,44 @@ trait ProcessableTrait
             return $this->getClient()->post(
                 'https://3dss-test.placetopay.com/api/v1/merchants',
                 [
-                'json' => [
-                    'auth' => [
-                        'Token' => $token,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => $token
                     ],
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ACCESS_TOKEN',
-                    'name' => 'EGM Ingenieria sin frondteras',
-                    'brand' => 'placetopay',
-                    'country' => 'COL',
-                    'currency' => 'COP',
-                    'document' => [
-                        'type' => 'RUT',
-                        'number' => '123456789-0'
-                    ],
-                    'url' => 'https://www.placetopay.com',
-                    'mcc' => 742,
-                    'isicClass' => 111,
-
-                    'branch' => [
-                        'name' => 'Oficina principal',
-                        'brand' => 'placetopay uno',
+                    'json' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ACCESS_TOKEN',
+                        'name' => 'EGM Ingenieria sin frondteras',
+                        'brand' => 'placetopay',
                         'country' => 'COL',
-                        'currency' => 'COP'
-                    ],
-                    'subscriptions' => [
-                        [
-                            'franchise' => 1,
-                            'acquirerBIN' => 12345678910,
-                            'version' => 2
-                        ]
-                    ],
-                    'invitations' => [
-                        [
-                            'admin@admin.com' => null
+                        'currency' => 'COP',
+                        'document' => [
+                            'type' => 'RUT',
+                            'number' => '123456789-0'
+                        ],
+                        'url' => 'https://www.placetopay.com',
+                        'mcc' => 742,
+                        'isicClass' => 111,
+
+                        'branch' => [
+                            'name' => 'Oficina principal',
+                            'brand' => 'placetopay uno',
+                            'country' => 'COL',
+                            'currency' => 'COP'
+                        ],
+                        'subscriptions' => [
+                            [
+                                'franchise' => 1,
+                                'acquirerBIN' => 12345678910,
+                                'version' => 2
+                            ]
+                        ],
+                        'invitations' => [
+                            [
+                                'admin@admin.com' => null
+                            ]
                         ]
                     ]
-                ]
                 ]
             );
         } catch (Exception $e) {
@@ -184,7 +185,8 @@ trait ProcessableTrait
     public function response($response, $data, int $size)
     {
         $status = $response->getStatusCode();
-        dump($status);
+        $res = $response->getBody()->getContents();
+        $response = json_decode($res);
 
         switch ($status) {
             case 200:
