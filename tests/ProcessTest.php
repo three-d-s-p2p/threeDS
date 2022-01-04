@@ -4,7 +4,6 @@ namespace Larangogon\ThreeDS\Tests;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Mail;
-use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\processThreeDS;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
@@ -70,21 +69,6 @@ class ProcessTest extends TestCase
         $threeDS->createRequest($data, $this->emailName, $this->token);
     }
 
-
-    /**
-     * @test
-     */
-    public function processPaymentMailTest()
-    {
-        $error = ['The field is required.'];
-        Mail::fake();
-
-        $email = new ErrorMail($this->emailName, $error);
-        Mail::to($this->emailName)->send($email);
-
-        Mail::assertSent(ErrorMail::class);
-    }
-
     /**
      * @test
      * @throws GuzzleException
@@ -129,6 +113,21 @@ class ProcessTest extends TestCase
                 ]
             ]
         );
-        $response = $this->request($data, $this->emailName, $this->token);
+
+        $this->request($data, $this->emailName, $this->token);
+    }
+
+    /**
+     * @test
+     */
+    public function processPaymentMailTest()
+    {
+        $error = ['The field is required.'];
+        Mail::fake();
+
+        $email = new ErrorMail($this->emailName, $error);
+        Mail::to($this->emailName)->send($email);
+
+        Mail::assertSent(ErrorMail::class);
     }
 }

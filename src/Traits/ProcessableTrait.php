@@ -132,8 +132,11 @@ trait ProcessableTrait
                 'https://3dss-test.placetopay.com/api/v1/merchants',
                 [
                 'json' => [
-                    'Accept' => 'string',
-                    'Authorization' => $token,
+                    'auth' => [
+                        'Token' => $token,
+                    ],
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ACCESS_TOKEN',
                     'name' => 'EGM Ingenieria sin frondteras',
                     'brand' => 'placetopay',
                     'country' => 'COL',
