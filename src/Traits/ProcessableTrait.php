@@ -169,6 +169,7 @@ trait ProcessableTrait
                 ]
             );
         } catch (Exception $e) {
+            echo $e;
             $this->emailError($e, $emailName);
         }
     }
