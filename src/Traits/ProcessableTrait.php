@@ -126,7 +126,6 @@ trait ProcessableTrait
      */
     public function request($data, string $emailName, string $token)
     {
-      //data type objet
         try {
             return $this->getClient()->post(
                 'https://3dss-test.placetopay.com/api/v1/merchants',
@@ -136,36 +135,34 @@ trait ProcessableTrait
                         'Authorization' => $token
                     ],
                     'json' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ACCESS_TOKEN',
-                        'name' => 'EGM Ingenieria sin frondteras',
-                        'brand' => 'placetopay',
-                        'country' => 'COL',
-                        'currency' => 'COP',
+                        'name' => $data->name,
+                        'brand' => $data->brand,
+                        'country' => $data->country,
+                        'currency' => $data->currency,
                         'document' => [
-                            'type' => 'RUT',
-                            'number' => '123456789-0'
+                            'type' => $data->type,
+                            'number' => $data->number
                         ],
-                        'url' => 'https://www.placetopay.com',
-                        'mcc' => 742,
-                        'isicClass' => 111,
+                        'url' => $data->url,
+                        'mcc' => $data->mcc,
+                        'isicClass' => $data->isicClass,
 
                         'branch' => [
-                            'name' => 'Oficina principal',
-                            'brand' => 'placetopay uno',
-                            'country' => 'COL',
-                            'currency' => 'COP'
+                            'name' => $data->nameBranch,
+                            'brand' => $data->brand,
+                            'country' => $data->country,
+                            'currency' => $data->currency,
                         ],
                         'subscriptions' => [
                             [
-                                'franchise' => 1,
-                                'acquirerBIN' => 12345678910,
-                                'version' => 2
+                                'franchise' => $data->franchise,
+                                'acquirerBIN' => $data->acquirerBIN,
+                                'version' => $data->version
                             ]
                         ],
                         'invitations' => [
                             [
-                                'admin@admin.com' => null
+                                'admin@admin.com' => $data->invitations
                             ]
                         ]
                     ]
