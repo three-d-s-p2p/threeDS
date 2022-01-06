@@ -12,7 +12,14 @@ class ThreeDSUpdateConcrete extends ProcessTemplate
 {
     use ProcessableTrait;
 
-    public function request($data, string $emailName, string $token)
+    /**
+     * @param object $data
+     * @param string $emailName
+     * @param string $token
+     * @return false|\Psr\Http\Message\ResponseInterface|string|void
+     * @throws GuzzleException
+     */
+    public function request(object $data, string $emailName, string $token)
     {
         try {
             return $this->getClient()->post(

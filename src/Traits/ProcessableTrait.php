@@ -38,6 +38,7 @@ trait ProcessableTrait
             );
             while (pcntl_waitpid(0, $status) != -1);
         } catch (Exception $e) {
+            echo $e;
             Log::error(
                 'Error authorization',
                 [ 'Error ' => $e ]
@@ -81,6 +82,7 @@ trait ProcessableTrait
                 unset($this->pids[$pid]);
             }
         } catch (Exception $e) {
+            echo $e;
             Log::error(
                 'Error chunkInputData',
                 [ 'Error ' => $e->getMessage() ]
@@ -118,13 +120,14 @@ trait ProcessableTrait
     }
 
     /**
-     * @param $data
+     * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return ResponseInterface|void
+     * @return mixed|ResponseInterface
      * @throws GuzzleException
+     * @throws \JsonException
      */
-    public function request($data, string $emailName, string $token)
+    public function request(object $data, string $emailName, string $token)
     {
         try {
             return $this->getClient()->post(
@@ -191,25 +194,25 @@ trait ProcessableTrait
                 $dataToken = [
                     'token' => $response,
                     'message' => null,
-                    'code' => null,
+                    'code' => $response->getStatusCode(),
                     'error' => null
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case '401':
+            case 401:
                 $dataToken = [
                     'token' => null,
                     'message' => $response->status->message,
-                    'code' => $response->status->code,
+                    'code' => $response->getStatusCode(),
                     'error' => 'No autenticado'
                 ];
                 $this->arrayInsert($dataToken, $size);
                 break;
-            case '422':
+            case 422:
                 $dataToken = [
                     'token' => null,
                     'message' => $response->status->message,
-                    'code' => $response->status->code,
+                    'code' => $response->getStatusCode(),
                     'error' => 'Mensajes de validación de datos'
                 ];
                 $this->arrayInsert($dataToken, $size);
@@ -241,6 +244,7 @@ trait ProcessableTrait
                 $this->datas = [];
             }
         } catch (Exception $e) {
+            echo $e;
             Log::error(
                 'Error arrayInsert',
                 [ 'Error ' => $e->getMessage() ]
@@ -275,7 +279,7 @@ trait ProcessableTrait
             case 200:
                 return $response;
                 break;
-            case '401':
+            case 401:
                 return [
                     'token' => null,
                     'message' => $response->status->message,
@@ -283,7 +287,7 @@ trait ProcessableTrait
                     'error' => 'No autenticado'
                 ];
                 break;
-            case '422':
+            case 422:
                 return [
                     'token' => null,
                     'message' => $response->status->message,
@@ -291,7 +295,7 @@ trait ProcessableTrait
                     'error' => 'Mensajes de validación de datos'
                 ];
                 break;
-            case '404':
+            case 404:
                 return [
                     'token' => null,
                     'message' => $response->status->message,
