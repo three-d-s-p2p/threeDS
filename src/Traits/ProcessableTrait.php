@@ -5,6 +5,7 @@ namespace Larangogon\ThreeDS\Traits;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
@@ -123,7 +124,7 @@ trait ProcessableTrait
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return Exception|\GuzzleHttp\Exception\RequestException|ResponseInterface|void
+     * @return Exception|RequestException|ResponseInterface|void
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
@@ -170,7 +171,7 @@ trait ProcessableTrait
                     ]
                 ]
             );
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        } catch (RequestException $e) {
             echo $e;
             return $e;
         }
@@ -266,34 +267,21 @@ trait ProcessableTrait
      */
     public function responseUpdate($response)
     {
-        $status = $response->getStatusCode();
+        //$status = $response->getStatusCode();
+
+        $status = $response->getCode();
 
         switch ($status) {
             case 200:
                 return $response;
                 break;
-            case 401:
+            case 422: // 'Mensajes de validación de datos'
+            case 401: //'No autenticado'
+            case 404: //'El comercio no existe'
                 return [
-                    'token' => null,
-                    'message' => $response->status->message,
-                    'code' => $response->getStatusCode(),
-                    'error' => 'No autenticado'
-                ];
-                break;
-            case 422:
-                return [
-                    'token' => null,
-                    'message' => $response->status->message,
-                    'code' => $response->getStatusCode(),
-                    'error' => 'Mensajes de validación de datos'
-                ];
-                break;
-            case 404:
-                return [
-                    'token' => null,
-                    'message' => $response,
-                    'code' => $response->getStatusCode(),
-                    'error' => 'El comercio no existe'
+                    'message' => $response->getMessage(),
+                    'code' => $status,
+                    'error' => $response->getResponse()
                 ];
                 break;
             default:
