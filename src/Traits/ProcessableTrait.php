@@ -171,10 +171,7 @@ trait ProcessableTrait
                 ]
             );
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            Log::error(
-                'Error arrayInsert',
-                [ 'Error ' => $e->getMessage() ]
-            );
+            echo $e;
             return $e;
         }
     }

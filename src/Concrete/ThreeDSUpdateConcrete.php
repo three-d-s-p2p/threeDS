@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 use Larangogon\ThreeDS\Templates\ProcessTemplate;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
+use Psr\Http\Message\ResponseInterface;
 
 class ThreeDSUpdateConcrete extends ProcessTemplate
 {
@@ -16,7 +17,7 @@ class ThreeDSUpdateConcrete extends ProcessTemplate
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return false|\Psr\Http\Message\ResponseInterface|string|void
+     * @return ResponseInterface|void
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
