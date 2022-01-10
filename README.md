@@ -6,10 +6,11 @@
 
 ### Usage
 ### Methods
-- createRequest
+- ### createRequest
+______________________________________________
 
 #### The following parameters are required
-- data: object :: information to process.
+- data: object-Collections :: information to process.
     ###### Example: iinformation imported from a file for mass management
 
         $data =  $data = Data::all();
@@ -38,7 +39,30 @@
   ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
     ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
 
-- ### Update
+- #### update
+________________________________________________________
+- #### The following parameters are required
+- data: object-Collections :: information to process.
+  ###### Example: iinformation imported from a file for mass management
+
+        $data =  $data = Data::all();
+
+- Required (fields)
+
+                'nameBranch' => 'Oficina principal',
+                'brand' => 'placetopay',
+                'country' => 'COL',
+                'currency' => 'COP',
+                'url' => 'https://www.placetopay.com',
+
+
+- emailName: string :: Email of the person who will be notified if an error occurs
+  ###### Example: larangogon2@gmail.com
+- token: string:: The authentication token which will be generated from the IT area.
+  ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
+  ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
+
+
 __________________________________
 
 ## Mass consumption by means of wires, in parallel 
@@ -66,8 +90,11 @@ _______________________________________________
 
 ## Installation
 
-## Flujo
+composer install (nombre del paquete)
 
-![img.png](img.png)
+## Flowchart
 
+![img_3.png](img_3.png)
+
+* Edit url: https://app.diagrams.net/#G1HmtzdPWRD6XUqM7Re7mxbcoajQz9mCbg
 
