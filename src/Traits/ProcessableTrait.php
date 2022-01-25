@@ -124,7 +124,7 @@ trait ProcessableTrait
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return Exception|RequestException|ResponseInterface|void
+     * @return string
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
@@ -135,7 +135,7 @@ trait ProcessableTrait
                 [
                     'headers' => [
                         'Accept' => 'application/json',
-                        'Authorization' => $token
+                        'Authorization' => "Bearer {$token}"
                     ],
                     'json' => [
                         'name' => $data->name,
@@ -149,7 +149,6 @@ trait ProcessableTrait
                         'url' => $data->url,
                         'mcc' => $data->mcc,
                         'isicClass' => $data->isicClass,
-
                         'branch' => [
                             'name' => $data->nameBranch,
                             'brand' => $data->brand,
@@ -165,14 +164,13 @@ trait ProcessableTrait
                         ],
                         'invitations' => [
                             [
-                                'admin@admin.com' => $data->invitations
+                                $data->invitations => null
                             ]
                         ]
                     ]
                 ]
-            );
-        } catch (RequestException $e) {
-            echo $e;
+            )->getBody()->getContents();
+        } catch (Exception $e) {
             return $e;
         }
     }
@@ -274,7 +272,6 @@ trait ProcessableTrait
         switch ($status) {
             case 200:
                 return $response;
-                break;
             case 422: // 'Mensajes de validación de datos'
             case 401: //'No autenticado'
             case 404: //'El comercio no existe'
@@ -283,7 +280,6 @@ trait ProcessableTrait
                     'code' => $status,
                     'error' => $response->getResponse()
                 ];
-                break;
             default:
                 return $response->getStatusCode();
         }

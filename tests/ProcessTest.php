@@ -18,8 +18,8 @@ class ProcessTest extends TestCase
      */
     public function processThreeDS()
     {
-        $emailName = env('EMAIL', 'johannitaarango2@gmail.com');
-        $token = env('TOKEN', '234567dfghjfgh567');
+        $emailName = env('EMAIL');
+        $token = env('TOKEN');
 
         $data = collect(
             [
@@ -55,7 +55,7 @@ class ProcessTest extends TestCase
                     'franchise' => 1,
                     'acquirerBIN' => 12345678910,
                     'version' => 2,
-                    'invitations' => null
+                    'invitations' => 'admin@admin.com'
                 ]
             ]
         );
@@ -102,7 +102,7 @@ class ProcessTest extends TestCase
             'franchise' => 1,
             'acquirerBIN' => 12345678910,
             'version' => 2,
-            'invitations' => null
+            'invitations' => 'leidy.arango@evertecinc.com'
         ];
 
         $threeDS = new processThreeDS();
@@ -152,7 +152,7 @@ class ProcessTest extends TestCase
                     'franchise' => 1,
                     'acquirerBIN' => 12345678910,
                     'version' => 2,
-                    'invitations' => null
+                    'invitations' => 'leidy.arango@evertecinc.com'
                 ]
             ]
         );
