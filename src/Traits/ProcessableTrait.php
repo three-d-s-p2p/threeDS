@@ -199,10 +199,10 @@ trait ProcessableTrait
             default:
                 $dataToken = [
                     'token' => null,
-                    'message' => $response->getMessage(),
+                    'message' => $response,
                     'idSubscriptions' => null,
                     'code' =>  $status,
-                    'error' => null
+                    'error' => 'not mapped error'
                 ];
         }
         $this->arrayInsert($dataToken, $size);
@@ -258,9 +258,9 @@ trait ProcessableTrait
                 ];
             default:
                 return [
-                    'message' => $response->getMessage(),
+                    'message' => $response,
                     'code' => $status,
-                    'error' => $response->getResponse(),
+                    'error' => 'not mapped error',
                 ];
         }
     }
