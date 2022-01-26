@@ -201,8 +201,8 @@ trait ProcessableTrait
                     'token' => null,
                     'message' => $response->getMessage(),
                     'idSubscriptions' => null,
-                    'code' => $status,
-                    'error' => $response->getResponse()
+                    'code' =>  $status,
+                    'error' => null
                 ];
         }
         $this->arrayInsert($dataToken, $size);
