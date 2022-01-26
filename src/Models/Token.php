@@ -16,5 +16,6 @@ class Token extends Model
         'error',
         'token',
         'message',
+        'idSubscriptions'
     ];
 }

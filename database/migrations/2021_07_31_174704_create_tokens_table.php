@@ -18,6 +18,7 @@ class CreateTokensTable extends Migration
             function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('token', 64)->nullable();
+                $table->unsignedBigInteger('idSubscriptions')->nullable();
                 $table->string('message', 300)->nullable();
                 $table->string('code')->nullable();
                 $table->string('error')->nullable();
