@@ -81,7 +81,6 @@ data will be divided by chunk of 500 with capacity of 20 threads
       abstract protected function request($data, string $emailName, string $token);
       abstract protected function response($response, $data, int $size);
       abstract protected function arrayInsert(array $data, int $size);
-      abstract protected function update($references, string $emailName, string $token);
       abstract protected function responseUpdate($response);
     
 
@@ -90,11 +89,17 @@ _______________________________________________
 
 ## Installation
 
-composer install (nombre del paquete)
+* composer require larangogon/three-d-s
+* php artisan vendor:publish --tag="three-d-s-migrations"
+* Use model Token: In the Token model: the information resulting from the consumption of createRequest is saved
+* php artisan vendor:publish --tag="three-d-s-config"
+* php artisan vendor:publish --tag="three-d-s-views"
+* 
+      
 
 ## Flowchart
 
 ![img_3.png](img_3.png)
 
-* Edit url: https://app.diagrams.net/#G1HmtzdPWRD6XUqM7Re7mxbcoajQz9mCbg
+* https://app.diagrams.net/#G1HmtzdPWRD6XUqM7Re7mxbcoajQz9mCbg
 

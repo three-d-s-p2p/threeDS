@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
             [
                 __DIR__ . '/../config/something.php' => config_path('something.php'),
             ],
-            'package-name-config'
+            'three-d-s-config'
         );
     }
 
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
             [
                 __DIR__ . '/../database/migrations' => base_path('database/migrations'),
             ],
-            'package-name-migrations'
+            'three-d-s-migrations'
         );
     }
 
@@ -53,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
             [
                 __DIR__ . '/../resources/views' => resource_path('views/vendor/package-name'),
             ],
-            'package-name-views'
+            'three-d-s-views'
         );
     }
 }
