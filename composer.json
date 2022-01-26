@@ -47,12 +47,5 @@
         "phpcs-auto-fix": "@phpcs-fix --standard=.phpcs.xml",
         "phpcs-auto-check-project": "phpcs --report=summary -p",
         "phpcs-auto-fix-project": "phpcbf --report=summary -p"
-    },
-
-    "repositories": [
-        {
-            "type": "path",
-            "url": "https://github.com/three-d-s-p2p/threeDS.git"
-        }
-    ]
+    }
 }

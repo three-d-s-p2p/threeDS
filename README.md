@@ -30,7 +30,7 @@ ______________________________________________
                 'franchise' => 1,
                 'acquirerBIN' => 12345678910,
                 'version' => 2,
-                'invitations' => null
+                'invitations' => 'larangogon@test.com'
            
 
 - emailName: string :: Email of the person who will be notified if an error occurs
@@ -54,7 +54,7 @@ ________________________________________________________
                 'country' => 'COL',
                 'currency' => 'COP',
                 'url' => 'https://www.placetopay.com',
-
+                'merchantID' => 1
 
 - emailName: string :: Email of the person who will be notified if an error occurs
   ###### Example: larangogon2@gmail.com
