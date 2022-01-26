@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
+use Psr\Http\Message\ResponseInterface;
 
 trait ProcessableTrait
 {
@@ -115,7 +116,7 @@ trait ProcessableTrait
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return string
+     * @return Exception|ResponseInterface
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
@@ -160,7 +161,7 @@ trait ProcessableTrait
                         ]
                     ]
                 ]
-            )->getBody()->getContents();
+            );
         } catch (Exception $e) {
             return $e;
         }

@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'threeds');
     }
 
     public function boot()
@@ -27,9 +27,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../config/something.php' => config_path('something.php'),
+                __DIR__ . '/../config' => config_path('/config'),
             ],
-            'three-d-s-config'
+            'threeds-config'
         );
     }
 
@@ -41,19 +41,19 @@ class AppServiceProvider extends ServiceProvider
             [
                 __DIR__ . '/../database/migrations' => base_path('database/migrations'),
             ],
-            'three-d-s-migrations'
+            'threeds-migrations'
         );
     }
 
     private function loadViews(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'package-name-view');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', '/view');
 
         $this->publishes(
             [
                 __DIR__ . '/../resources/views' => resource_path('views/vendor/package-name'),
             ],
-            'three-d-s-views'
+            'threeds-views'
         );
     }
 }
