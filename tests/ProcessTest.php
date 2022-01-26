@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\processThreeDS;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
-use PHPUnit\Framework\TestCase;
 
 class ProcessTest extends TestCase
 {
@@ -17,8 +16,8 @@ class ProcessTest extends TestCase
      */
     public function processThreeDS()
     {
-        $emailName = env('EMAIL');
-        $token = env('TOKEN');
+        $emailName = config('config.email', 'larangogon@uniminuto.edu.com');
+        $token = config('config.token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzMyMWY0M2U1ZTM3YTExYjlmNzc1NTYzYWViZWNkYzY2NDMxMmRiYTc4OWQxMjU1YjE2ZGRhMWUxODYwNjI1YzliMDNjYjFlMDUyMGZlZTMiLCJpYXQiOjE2NDMyMzM5MzQuNzQyNDg5LCJuYmYiOjE2NDMyMzM5MzQuNzQyNDkyLCJleHAiOjE2NDMyNjk5MzQuNzM0ODg1LCJzdWIiOiIyOSIsInNjb3BlcyI6W119.MbmYjQEkvhI8r0Nawe5hcFaeEid27zfAM2u5oaSrOjSQxXRBLUviRyRMGnHFDZyhaDEQTpWXT1ak7p5P9FokfTDoQu2uNBQAz6CgET_LoT_Dg2_ng3cm6XscxpBr2QXiYdnlktmrxRAP4ZUCV-SsJkmLj2TVhwuFyiuWF61PHcg');
         $data = collect(
             [
                 (object)[
@@ -67,8 +66,9 @@ class ProcessTest extends TestCase
      */
     public function requestThreeDS()
     {
-        $emailName = env('EMAIL');
-        $token = env('TOKEN');
+        $emailName = config('config.email', 'larangogon@uniminuto.edu.com');
+        $token = config('config.token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzMyMWY0M2U1ZTM3YTExYjlmNzc1NTYzYWViZWNkYzY2NDMxMmRiYTc4OWQxMjU1YjE2ZGRhMWUxODYwNjI1YzliMDNjYjFlMDUyMGZlZTMiLCJpYXQiOjE2NDMyMzM5MzQuNzQyNDg5LCJuYmYiOjE2NDMyMzM5MzQuNzQyNDkyLCJleHAiOjE2NDMyNjk5MzQuNzM0ODg1LCJzdWIiOiIyOSIsInNjb3BlcyI6W119.MbmYjQEkvhI8r0Nawe5hcFaeEid27zfAM2u5oaSrOjSQxXRBLUviRyRMGnHFDZyhaDEQTpWXT1ak7p5P9FokfTDoQu2uNBQAz6CgET_LoT_Dg2_ng3cm6XscxpBr2QXiYdnlktmrxRAP4ZUCV-SsJkmLj2TVhwuFyiuWF61PHcg');
+
         $data = [
             'id' => 1,
             'name' => 'EGM Ingenieria sin frondteras test three',
@@ -97,8 +97,9 @@ class ProcessTest extends TestCase
      */
     public function processThreeDSUpdate()
     {
-        $emailName = env('EMAIL', 'johannitaarango2@gmail.com');
-        $token = env('TOKEN');
+        $emailName = config('config.email', 'larangogon@uniminuto.edu.com');
+        $token = config('config.token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzMyMWY0M2U1ZTM3YTExYjlmNzc1NTYzYWViZWNkYzY2NDMxMmRiYTc4OWQxMjU1YjE2ZGRhMWUxODYwNjI1YzliMDNjYjFlMDUyMGZlZTMiLCJpYXQiOjE2NDMyMzM5MzQuNzQyNDg5LCJuYmYiOjE2NDMyMzM5MzQuNzQyNDkyLCJleHAiOjE2NDMyNjk5MzQuNzM0ODg1LCJzdWIiOiIyOSIsInNjb3BlcyI6W119.MbmYjQEkvhI8r0Nawe5hcFaeEid27zfAM2u5oaSrOjSQxXRBLUviRyRMGnHFDZyhaDEQTpWXT1ak7p5P9FokfTDoQu2uNBQAz6CgET_LoT_Dg2_ng3cm6XscxpBr2QXiYdnlktmrxRAP4ZUCV-SsJkmLj2TVhwuFyiuWF61PHcg');
+
         $data = collect(
             [
                 (object)[
@@ -131,7 +132,7 @@ class ProcessTest extends TestCase
      */
     public function processPaymentMailTest()
     {
-        $emailName = env('EMAIL', 'johannitaarango2@gmail.com');
+        $emailName = config('config.email', 'johannitaarango2@gmail.com');
         $error = ['The field is required.'];
         Mail::fake();
 
