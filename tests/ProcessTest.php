@@ -19,12 +19,11 @@ class ProcessTest extends TestCase
     {
         $emailName = env('EMAIL');
         $token = env('TOKEN');
-
         $data = collect(
             [
                 (object)[
                     'id' => 1,
-                    'name' => 'EGM Ingenieria sin frondteras',
+                    'name' => 'EGM Ingenieria sin frondteras test one',
                     'brand' => 'placetopay',
                     'country' => 'COL',
                     'currency' => 'COP',
@@ -41,7 +40,7 @@ class ProcessTest extends TestCase
                 ],
                 (object)[
                     'id' => 2,
-                    'name' => 'EGM Ingenieria sin frondteras',
+                    'name' => 'EGM Ingenieria sin frondteras test ',
                     'brand' => 'placetopay',
                     'country' => 'COL',
                     'currency' => 'COP',
@@ -63,7 +62,6 @@ class ProcessTest extends TestCase
         $threeDS->createRequest($data, $emailName, $token);
     }
 
-
     /**
      * @test
      */
@@ -71,10 +69,9 @@ class ProcessTest extends TestCase
     {
         $emailName = env('EMAIL');
         $token = env('TOKEN');
-
         $data = [
             'id' => 1,
-            'name' => 'EGM Ingenieria sin frondteras',
+            'name' => 'EGM Ingenieria sin frondteras test three',
             'brand' => 'placetopay',
             'country' => 'COL',
             'currency' => 'COP',
@@ -95,18 +92,18 @@ class ProcessTest extends TestCase
     }
 
     /**
-     * @return void
      * @test
+     * @return void
      */
     public function processThreeDSUpdate()
     {
-        $emailName = env('EMAIL');
+        $emailName = env('EMAIL', 'johannitaarango2@gmail.com');
         $token = env('TOKEN');
         $data = collect(
             [
                 (object)[
                     'id' => 1,
-                    'brand' => 'placetopay',
+                    'brand' => 'placetopay test one',
                     'country' => 'COL',
                     'currency' => 'COP',
                     'url' => 'https://www.placetopay.com',
@@ -115,7 +112,7 @@ class ProcessTest extends TestCase
                 ],
                 (object)[
                     'id' => 2,
-                    'brand' => 'placetopay',
+                    'brand' => 'placetopay test',
                     'country' => 'COL',
                     'currency' => 'COP',
                     'url' => 'https://www.placetopay.com',
@@ -134,7 +131,7 @@ class ProcessTest extends TestCase
      */
     public function processPaymentMailTest()
     {
-        $emailName = env('EMAIL');
+        $emailName = env('EMAIL', 'johannitaarango2@gmail.com');
         $error = ['The field is required.'];
         Mail::fake();
 

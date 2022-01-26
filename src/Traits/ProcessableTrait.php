@@ -28,6 +28,8 @@ trait ProcessableTrait
             $initial = microtime(true);
             $this->chunkInputData($data, $emailName, $token);
 
+            while (pcntl_waitpid(0, $status) != -1);
+
             Log::info(
                 'Completed process',
                 [
@@ -35,7 +37,6 @@ trait ProcessableTrait
                     'Memory' => (memory_get_usage() / 1024) / 1024 . ' MB',
                 ]
             );
-            while (pcntl_waitpid(0, $status) != -1);
         } catch (Exception $e) {
             $this->emailError($e, $emailName);
         }
@@ -80,7 +81,6 @@ trait ProcessableTrait
                 'Error chunkInputData',
                 [ 'Error ' => $e->getMessage() ]
             );
-
             $this->emailError($e, $emailName);
         }
     }
@@ -248,9 +248,9 @@ trait ProcessableTrait
         switch ($status) {
             case 200:
                 return $response;
-            case 422: // 'Mensajes de validación de datos'
-            case 401: //'No autenticado'
-            case 404: //'El comercio no existe'
+            case 422:
+            case 401:
+            case 404:
                 return [
                     'message' => $response->getMessage(),
                     'code' => $status,
