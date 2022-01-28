@@ -6,7 +6,7 @@ use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Concrete\ThreeDSUpdateConcrete;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 
-class processThreeDS
+class processThreeDSMassive
 {
     use ProcessableTrait;
 
@@ -22,6 +22,12 @@ class processThreeDS
         $threeDS->process($data, $emailName, $token);
     }
 
+    /**
+     * @param $data
+     * @param string $emailName
+     * @param string $token
+     * @return void
+     */
     public function update($data, string $emailName, string $token)
     {
         $threeDS = new ThreeDSUpdateConcrete();

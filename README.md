@@ -6,7 +6,55 @@
 
 ### Usage
 ### Methods
+________________________________________________________
+###CreateOrUpdate
+________________________________________________________
+#### The following parameters are required
+- data: one object :: information to process.
+  ###### Example: information imported from a file for mass management
+
+        $data =  $data = Data::find('id');
+- Required (fields)
+
+Create Merchant
+
+                'name' => 'EGM Ingenieria sin frondteras',
+                'brand' => 'placetopay',
+                'type' => 'RUT',
+                'number' => '123456789-0',
+                'url' => 'https://www.placetopay.com',
+                'mcc' => 742,
+                'isicClass' => 111,
+                'nameBranch' => 'Oficina principal',
+                'country' => 'COL',
+                'currency' => 'COP',
+                'franchise' => 1,
+                'acquirerBIN' => 12345678910,
+                'version' => 2,
+                'invitations' => 'larangogon@test.com',
+                'merchantID' => null
+
+Update Merchant
+
+                'nameBranch' => 'Oficina principal',
+                'brand' => 'placetopay',
+                'country' => 'COL',
+                'currency' => 'COP',
+                'url' => 'https://www.placetopay.com',
+                'merchantID' => 1
+
+               
+
+- token: string:: The authentication token which will be generated from the IT area.
+######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
+###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php....
+
+__________________________________________________
+## Flowchart
+
+![img.png](img.png)
 ______________________________________________________
+___________________________________________________________
 ### createRequest
 ______________________________________________
 

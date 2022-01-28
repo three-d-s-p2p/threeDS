@@ -12,7 +12,7 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Contracts\ClientContract;
 use Larangogon\ThreeDS\Mail\ErrorMail;
-use Larangogon\ThreeDS\processThreeDS;
+use Larangogon\ThreeDS\ProcessThreeDSMassive;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 
 class ProcessThreeDSTest extends TestCase
@@ -53,10 +53,10 @@ class ProcessThreeDSTest extends TestCase
         $client = new Client(['handler' => $handlerStack]);
         $this->app->bind(ClientContract::class, fn() => $client);
 
-        $collect = new componentTest();
+        $collect = new ComponentTest();
         $data = $collect->collectTest();
 
-        $threeDS = new processThreeDS();
+        $threeDS = new processThreeDSMassive();
         $threeDS->createRequest($data, $this->emailName, $this->token);
 
         $this->assertTrue(true);
@@ -88,16 +88,16 @@ class ProcessThreeDSTest extends TestCase
                 new RequestException('Error Communicating with Server', new Request('POST', 'test'))
             ]
         );
+
         $handlerStack = HandlerStack::create($mock);
         $client = new Client(['handler' => $handlerStack]);
         $this->app->bind(ClientContract::class, fn() => $client);
 
-        $collect = new componentTest();
+        $collect = new ComponentTest();
         $data = $collect->objectTest();
 
-        $threeDS = new processThreeDS();
-        $threeDS->request((object)$data, $this->emailName, $this->token);
-
+        $threeDS = new processThreeDSMassive();
+        $threeDS->request((object)$data, $this->token);
         $this->assertTrue(true);
     }
 
@@ -141,10 +141,10 @@ class ProcessThreeDSTest extends TestCase
         $client = new Client(['handler' => $handlerStack]);
         $this->app->bind(ClientContract::class, fn() => $client);
 
-        $collect = new componentTest();
+        $collect = new ComponentTest();
         $data = $collect->collectUpdateTest();
 
-        $threeDS = new processThreeDS();
+        $threeDS = new processThreeDSMassive();
         $threeDS->update($data, $this->emailName, $this->token);
 
         $this->assertTrue(true);

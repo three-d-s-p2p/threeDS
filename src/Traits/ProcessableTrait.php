@@ -3,18 +3,18 @@
 namespace Larangogon\ThreeDS\Traits;
 
 use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Larangogon\ThreeDS\Contracts\ClientContract;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
 use Psr\Http\Message\ResponseInterface;
 
 trait ProcessableTrait
 {
+    use ConnectionTrait;
+
     protected array $pids = [];
     protected array $datas = [];
 
@@ -22,7 +22,7 @@ trait ProcessableTrait
      * @param $data
      * @param string $emailName
      * @param string $token
-     * @return void
+     * @return Exception|void
      * @throws GuzzleException
      */
     protected function authorization($data, string $emailName, string $token)
@@ -50,6 +50,8 @@ trait ProcessableTrait
                 ]
             );
             $this->emailError($e, $emailName);
+
+            return $e;
         }
     }
 
@@ -57,7 +59,7 @@ trait ProcessableTrait
      * @param $references
      * @param string $emailName
      * @param string $token
-     * @return void
+     * @return Exception|void
      * @throws GuzzleException
      */
     protected function chunkInputData($references, string $emailName, string $token)
@@ -92,6 +94,8 @@ trait ProcessableTrait
                 'Error chunkInputData',
                 [ 'Error' => $e->getMessage() ]
             );
+
+            return $e;
         }
     }
 
@@ -108,94 +112,27 @@ trait ProcessableTrait
 
     /**
      * @param $references
-     * @param string $emailName
      * @param string $token
      * @return void
      * @throws GuzzleException
      */
-    public function create($references, string $emailName, string $token)
+    public function create($references, string $token)
     {
         foreach ($references as $data) {
-            $response = $this->request($data, $emailName, $token);
+            $response = $this->request($data, $token);
             $this->response($response, count($references));
         }
     }
 
     /**
      * @param object $data
-     * @param string $emailName
      * @param string $token
      * @return Response|ResponseInterface
      * @throws GuzzleException
      */
-    public function request(object $data, string $emailName, string $token)
+    public function request(object $data, string $token)
     {
-        try {
-            return $this->getClient()->post(
-                'https://3dss-test.placetopay.com/api/v1/merchants',
-                [
-                    'headers' => [
-                        'Accept' => 'application/json',
-                        'Authorization' => "Bearer {$token}"
-                    ],
-                    'json' => [
-                        'name' => $data->name,
-                        'brand' => $data->brand,
-                        'country' => $data->country,
-                        'currency' => $data->currency,
-                        'document' => [
-                            'type' => $data->type,
-                            'number' => $data->number
-                        ],
-                        'url' => $data->url,
-                        'mcc' => $data->mcc,
-                        'isicClass' => $data->isicClass,
-                        'branch' => [
-                            'name' => $data->nameBranch,
-                            'brand' => $data->brand,
-                            'country' => $data->country,
-                            'currency' => $data->currency,
-                        ],
-                        'subscriptions' => [
-                            [
-                                'franchise' => $data->franchise,
-                                'acquirerBIN' => $data->acquirerBIN,
-                                'version' => $data->version
-                            ]
-                        ],
-                        'invitations' => [
-                            $data->invitations
-                        ]
-                    ]
-                ]
-            );
-        } catch (Exception $e) {
-            $status = $e->getCode();
-            if ($status === 0) {
-                $status = 500;
-            }
-
-            Log::error(
-                'Error request',
-                [
-                    'exception' => $e,
-                    'Error ' => $e->getMessage(),
-                    'code' => $e->getCode()
-                ]
-            );
-            return new Response(
-                $status,
-                ['error'],
-                json_encode(
-                    [
-                        'data' => [
-                            'error' => $status,
-                            'message' => $e->getMessage()
-                        ]
-                    ],
-                ),
-            );
-        }
+        return $this->requestConnectionCreate($data, $token);
     }
 
     /**
@@ -237,14 +174,6 @@ trait ProcessableTrait
                 ];
         }
             $this->arrayInsert($dataToken, $size);
-    }
-
-    /**
-     * @return Client
-     */
-    private function getClient(): Client
-    {
-        return app(ClientContract::class);
     }
 
     /**
