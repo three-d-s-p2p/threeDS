@@ -3,6 +3,8 @@
 namespace Larangogon\ThreeDS\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Larangogon\ThreeDS\Contracts\ClientContract;
+use Larangogon\ThreeDS\Services\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../../config/config.php', 'threeds');
+
+        $this->app->bind(ClientContract::class, Client::class);
     }
 
     public function boot()
@@ -51,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->publishes(
             [
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/package-name'),
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/threeds'),
             ],
             'threeds-views'
         );

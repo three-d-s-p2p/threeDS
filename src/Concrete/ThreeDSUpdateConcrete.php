@@ -4,6 +4,8 @@ namespace Larangogon\ThreeDS\Concrete;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Log;
 use Larangogon\ThreeDS\Templates\ProcessTemplate;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +18,7 @@ class ThreeDSUpdateConcrete extends ProcessTemplate
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return Exception|ResponseInterface
+     * @return Response|ResponseInterface
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
@@ -41,7 +43,26 @@ class ThreeDSUpdateConcrete extends ProcessTemplate
                 ]
             );
         } catch (Exception $e) {
-            return $e;
+            Log::error(
+                'Error requestUpdate',
+                [ 'Error ' => $e->getMessage() ]
+            );
+            return new Response(
+                400,
+                [],
+                json_encode(
+                    [
+                        'status' => [
+                            'code' => 400
+                        ],
+                        'data' => [
+                            [
+                                'error' => $e
+                            ]
+                        ]
+                    ],
+                ),
+            );
         }
     }
 

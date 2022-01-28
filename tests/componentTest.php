@@ -2,23 +2,11 @@
 
 namespace Larangogon\ThreeDS\Tests;
 
-use Illuminate\Support\Facades\Mail;
-use Larangogon\ThreeDS\Mail\ErrorMail;
-use Larangogon\ThreeDS\processThreeDS;
-use Larangogon\ThreeDS\Traits\ProcessableTrait;
-
-class ProcessTest extends TestCase
+class componentTest
 {
-    use ProcessableTrait;
-
-    /**
-     * @test
-     */
-    public function processThreeDS()
+    public function collectTest(): \Illuminate\Support\Collection
     {
-        $emailName = config('config.email');
-        $token = config('config.token');
-        $data = collect(
+        return collect(
             [
                 (object)[
                     'id' => 1,
@@ -56,20 +44,11 @@ class ProcessTest extends TestCase
                 ]
             ]
         );
-
-        $threeDS = new processThreeDS();
-        $threeDS->createRequest($data, $emailName, $token);
     }
 
-    /**
-     * @test
-     */
-    public function requestThreeDS()
+    public function objectTest(): array
     {
-        $emailName = config('config.email');
-        $token = config('config.token');
-
-        $data = [
+        return [
             'id' => 1,
             'name' => 'EGM Ingenieria sin frondteras test three',
             'brand' => 'placetopay',
@@ -86,20 +65,11 @@ class ProcessTest extends TestCase
             'version' => 2,
             'invitations' => 'leidy.arango@evertecinc.com'
         ];
-
-        $threeDS = new processThreeDS();
-        $threeDS->request((object)$data, $emailName, $token);
     }
 
-    /**
-     * @test
-     * @return void
-     */
-    public function processThreeDSUpdate()
+    public function collectUpdateTest(): \Illuminate\Support\Collection
     {
-        $emailName = config('config.email');
-        $token = config('config.token');
-        $data = collect(
+        return collect(
             [
                 (object)[
                     'id' => 1,
@@ -121,23 +91,5 @@ class ProcessTest extends TestCase
                 ]
             ]
         );
-
-        $threeDS = new processThreeDS();
-        $threeDS->update($data, $emailName, $token);
-    }
-
-    /**
-     * @test
-     */
-    public function processPaymentMailTest()
-    {
-        $emailName = config('config.email');
-        $error = ['The field is required.'];
-        Mail::fake();
-
-        $email = new ErrorMail($emailName, $error);
-        Mail::to($emailName)->send($email);
-
-        Mail::assertSent(ErrorMail::class);
     }
 }

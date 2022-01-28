@@ -1,4 +1,4 @@
-## 3ds IMP Operaciones 
+## 3ds MPI Operations
 
 ### Scope
 
@@ -6,7 +6,8 @@
 
 ### Usage
 ### Methods
-- ### createRequest
+______________________________________________________
+### createRequest
 ______________________________________________
 
 #### The following parameters are required
@@ -39,7 +40,9 @@ ______________________________________________
   ######Note: the token must be requested from the area in charge of the PlaceToPay By Evertec
     ###### Example: 7EuWhiISGug3YW3nVQ99ONS8sO1bCc3UcG7T_php
 
-- #### update
+
+_________________________________________________________________
+#### Update
 ________________________________________________________
 - #### The following parameters are required
 - data: object-Collections :: information to process.
@@ -79,7 +82,7 @@ data will be divided by chunk of 500 with capacity of 20 threads
       abstract protected function emailError($error, string $emailName);
       abstract protected function create($references, string $emailName, string $token);
       abstract protected function request($data, string $emailName, string $token);
-      abstract protected function response($response, $data, int $size);
+      abstract protected function response($response, int $size);
       abstract protected function arrayInsert(array $data, int $size);
       abstract protected function responseUpdate($response);
     
@@ -89,11 +92,11 @@ _______________________________________________
 
 ## Installation
 
-* composer require larangogon/three-d-s
-* php artisan vendor:publish --tag="three-d-s-migrations"
+* composer require larangogon/threeds
+* php artisan vendor:publish --tag="threeds-migrations"
 * Use model Token: In the Token model: the information resulting from the consumption of createRequest is saved
-* php artisan vendor:publish --tag="three-d-s-config"
-* php artisan vendor:publish --tag="three-d-s-views"
+* php artisan vendor:publish --tag="threeds-config"
+* php artisan vendor:publish --tag="threeds-views"
 * 
       
 
