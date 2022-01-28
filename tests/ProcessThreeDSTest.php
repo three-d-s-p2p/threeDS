@@ -22,7 +22,7 @@ class ProcessThreeDSTest extends TestCase
 
     protected string $emailName = 'larangogon@uniminuto.edu.com';
 
-    protected string $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzMyMWY0M2U1ZTM3YTExYjlmNzc1NTYzYWViZWNkYzY2NDMxMmRiYTc4OWQxMjU1YjE2ZGRhMWUxODYwNjI1YzliMDNjYjFlMDUyMGZlZTMiLCJpYXQiOjE2NDMyMzM5MzQuNzQyNDg5LCJuYmYiOjE2NDMyMzM5MzQuNzQyNDkyLCJleHAiOjE2NDMyNjk5MzQuNzM0ODg1LCJzdWIiOiIyOSIsInNjb3BlcyI6W119.MbmYjQEkvhI8r0Nawe5hcFaeEid27zfAM2u5oaSrOjSQxXRBLUviRyRMGnHFDZyhaDEQTpWXT1ak7p5P9FokfTDoQu2uNBQAz6CgET_LoT_Dg2_ng3cm6XscxpBr2QXiYdnlktmrxRAP4ZUCV-SsJkmLj2TVhwuFyiuWF61PHcg';
+    protected string $token = '';
 
 
     /**
@@ -123,7 +123,7 @@ class ProcessThreeDSTest extends TestCase
                                     'id' => 1,
                                     'name' => 'Oficina Ciudad A',
                                     'brand' => 'Compañía Ciudad A',
-                                    'url' => 'https://company-a.com'
+                                    'url' => 'https://companyar-a.com'
                                 ],
                                 [
                                     'id' => 2,
