@@ -166,15 +166,27 @@ trait ProcessableTrait
                 ]
             );
         } catch (Exception $e) {
+            $status = $e->getCode();
+            if ($status === 0) {
+                $status = 500;
+            }
+
+            Log::error(
+                'Error request',
+                [
+                    'exception' => $e,
+                    'Error ' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]
+            );
             return new Response(
-                400,
-                [],
+                $status,
+                ['error'],
                 json_encode(
                     [
                         'data' => [
-                            [
-                                'error' => $e
-                            ]
+                            'error' => $status,
+                            'message' => $e->getMessage()
                         ]
                     ],
                 ),
@@ -191,7 +203,6 @@ trait ProcessableTrait
     {
         $status = $response->getStatusCode();
         $response = json_decode($response->getBody()->getContents());
-
         switch ($status) {
             case 200:
                 $dataToken = [
@@ -206,7 +217,7 @@ trait ProcessableTrait
             case 401:
                 $dataToken = [
                 'token' => null,
-                'message' => null,
+                'message' => $response->data->message,
                 'idSubscriptions' => null,
                 'code' => $status,
                 'error' => $response->data->error
@@ -215,10 +226,10 @@ trait ProcessableTrait
             default:
                 $dataToken = [
                 'token' => null,
-                'message' => $response,
+                'message' => $response->data->message,
                 'idSubscriptions' => null,
                 'code' =>  $status,
-                'error' => 'not mapped error'
+                'error' => $response->data->error
                 ];
         }
             $this->arrayInsert($dataToken, $size);
