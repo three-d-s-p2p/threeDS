@@ -232,7 +232,7 @@ trait ProcessableTrait
                 'token' => null,
                 'message' => $response->data->message,
                 'idSubscriptions' => null,
-                'code' =>  $status,
+                'code' =>  'error no mapeado',
                 'error' => $response->data->error
                 ];
         }
