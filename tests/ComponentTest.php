@@ -2,7 +2,7 @@
 
 namespace Larangogon\ThreeDS\Tests;
 
-class componentTest
+class ComponentTest
 {
     public function collectTest(): \Illuminate\Support\Collection
     {
@@ -91,5 +91,27 @@ class componentTest
                 ]
             ]
         );
+    }
+
+    public function objectUpdateOrCreateTest(): array
+    {
+        return [
+            'id' => 1,
+            'name' => 'EGM Ingenieria sin frondteras test three',
+            'brand' => 'placetopay1',
+            'country' => 'COL',
+            'currency' => 'COP',
+            'type' => 'RUT',
+            'number' => '123456789-0',
+            'url' => 'https://www.placetopay2.com',
+            'mcc' => 742,
+            'isicClass' => 111,
+            'nameBranch' => 'Oficina principal',
+            'franchise' => 1,
+            'acquirerBIN' => 12345678910,
+            'version' => 2,
+            'invitations' => 'leidy.arango@evertecinc.com',
+            'merchantID' => 1
+        ];
     }
 }
