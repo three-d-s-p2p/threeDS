@@ -9,7 +9,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Contracts\ClientContract;
 use Larangogon\ThreeDS\Mail\ErrorMail;
@@ -155,12 +154,11 @@ class ProcessThreeDSTest extends TestCase
      */
     public function processPaymentMailTest()
     {
-        $emailName = config('config.email', 'johannitaarango2@gmail.com');
         $error = ['The field is required.'];
         Mail::fake();
 
-        $email = new ErrorMail($emailName, $error);
-        Mail::to($emailName)->send($email);
+        $email = new ErrorMail($this->emailName, $error);
+        Mail::to($this->emailName)->send($email);
 
         Mail::assertSent(ErrorMail::class);
 
