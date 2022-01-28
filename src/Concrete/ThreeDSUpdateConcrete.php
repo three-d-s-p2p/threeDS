@@ -43,22 +43,27 @@ class ThreeDSUpdateConcrete extends ProcessTemplate
                 ]
             );
         } catch (Exception $e) {
+            $status = $e->getCode();
+            if ($status === 0) {
+                $status = 500;
+            }
+
             Log::error(
-                'Error requestUpdate',
-                [ 'Error ' => $e->getMessage() ]
+                'Error request',
+                [
+                    'exception' => $e,
+                    'Error ' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]
             );
             return new Response(
-                400,
-                [],
+                $status,
+                ['error'],
                 json_encode(
                     [
-                        'status' => [
-                            'code' => 400
-                        ],
                         'data' => [
-                            [
-                                'error' => $e
-                            ]
+                            'error' => $status,
+                            'message' => $e->getMessage()
                         ]
                     ],
                 ),

@@ -21,7 +21,7 @@ class ProcessThreeDSTest extends TestCase
 
     protected string $emailName = 'larangogon@uniminuto.edu.com';
 
-    protected string $token = '';
+    protected string $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzMyMWY0M2U1ZTM3YTExYjlmNzc1NTYzYWViZWNkYzY2NDMxMmRiYTc4OWQxMjU1YjE2ZGRhMWUxODYwNjI1YzliMDNjYjFlMDUyMGZlZTMiLCJpYXQiOjE2NDMyMzM5MzQuNzQyNDg5LCJuYmYiOjE2NDMyMzM5MzQuNzQyNDkyLCJleHAiOjE2NDMyNjk5MzQuNzM0ODg1LCJzdWIiOiIyOSIsInNjb3BlcyI6W119.MbmYjQEkvhI8r0Nawe5hcFaeEid27zfAM2u5oaSrOjSQxXRBLUviRyRMGnHFDZyhaDEQTpWXT1ak7p5P9FokfTDoQu2uNBQAz6CgET_LoT_Dg2_ng3cm6XscxpBr2QXiYdnlktmrxRAP4ZUCV-SsJkmLj2TVhwuFyiuWF61PHcg';
 
 
     /**
@@ -33,7 +33,7 @@ class ProcessThreeDSTest extends TestCase
             [
             new Response(
                 200,
-                ['X-Foo' => 'Bar'],
+                ['test' => 'threeds collect'],
                 json_encode(
                     [
                     'status' => [
@@ -72,7 +72,7 @@ class ProcessThreeDSTest extends TestCase
             [
                 new Response(
                     200,
-                    ['X-Foo' => 'Bar'],
+                    ['test' => 'threeds object'],
                     json_encode(
                         [
                             'status' => [
@@ -111,7 +111,7 @@ class ProcessThreeDSTest extends TestCase
             [
                 new Response(
                     200,
-                    ['X-Foo' => 'Bar'],
+                    ['test' => 'threeds update'],
                     json_encode(
                         [
                             'status' => [
@@ -146,6 +146,7 @@ class ProcessThreeDSTest extends TestCase
 
         $threeDS = new processThreeDS();
         $threeDS->update($data, $this->emailName, $this->token);
+
         $this->assertTrue(true);
     }
 
@@ -156,10 +157,8 @@ class ProcessThreeDSTest extends TestCase
     {
         $error = ['The field is required.'];
         Mail::fake();
-
         $email = new ErrorMail($this->emailName, $error);
         Mail::to($this->emailName)->send($email);
-
         Mail::assertSent(ErrorMail::class);
 
         $this->assertTrue(true);
