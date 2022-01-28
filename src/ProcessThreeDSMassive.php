@@ -6,7 +6,7 @@ use Larangogon\ThreeDS\Concrete\ThreeDSConcrete;
 use Larangogon\ThreeDS\Concrete\ThreeDSUpdateConcrete;
 use Larangogon\ThreeDS\Traits\ProcessableTrait;
 
-class processThreeDSMassive
+class ProcessThreeDSMassive
 {
     use ProcessableTrait;
 

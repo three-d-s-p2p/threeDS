@@ -56,7 +56,7 @@ class ProcessThreeDSTest extends TestCase
         $collect = new ComponentTest();
         $data = $collect->collectTest();
 
-        $threeDS = new processThreeDSMassive();
+        $threeDS = new ProcessThreeDSMassive();
         $threeDS->createRequest($data, $this->emailName, $this->token);
 
         $this->assertTrue(true);
@@ -96,7 +96,7 @@ class ProcessThreeDSTest extends TestCase
         $collect = new ComponentTest();
         $data = $collect->objectTest();
 
-        $threeDS = new processThreeDSMassive();
+        $threeDS = new ProcessThreeDSMassive();
         $threeDS->request((object)$data, $this->token);
         $this->assertTrue(true);
     }
@@ -144,7 +144,7 @@ class ProcessThreeDSTest extends TestCase
         $collect = new ComponentTest();
         $data = $collect->collectUpdateTest();
 
-        $threeDS = new processThreeDSMassive();
+        $threeDS = new ProcessThreeDSMassive();
         $threeDS->update($data, $this->emailName, $this->token);
 
         $this->assertTrue(true);
