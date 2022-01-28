@@ -43,7 +43,11 @@ trait ProcessableTrait
         } catch (Exception $e) {
             Log::error(
                 'Error authorization',
-                [ 'Error ' => $e->getMessage() ]
+                [
+                    'exception' => $e,
+                    'Error ' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]
             );
             $this->emailError($e, $emailName);
         }
@@ -86,7 +90,7 @@ trait ProcessableTrait
         } catch (Exception $e) {
             Log::error(
                 'Error chunkInputData',
-                [ 'Error ' => $e->getMessage() ]
+                [ 'Error' => $e->getMessage() ]
             );
         }
     }
