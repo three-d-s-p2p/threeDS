@@ -11,7 +11,7 @@ abstract class ProcessTemplate implements ProcessableContract
     abstract protected function emailError($error, string $emailName);
     abstract protected function create($references, string $emailName, string $token);
     abstract protected function request(object $data, string $emailName, string $token);
-    abstract protected function response($response, $data, int $size);
+    abstract protected function response($response, int $size);
     abstract protected function arrayInsert(array $data, int $size);
     abstract protected function responseUpdate($response);
 

@@ -5,8 +5,11 @@ namespace Larangogon\ThreeDS\Traits;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Larangogon\ThreeDS\Contracts\ClientContract;
 use Larangogon\ThreeDS\Mail\ErrorMail;
 use Larangogon\ThreeDS\Models\Token;
 use Psr\Http\Message\ResponseInterface;
@@ -39,6 +42,10 @@ trait ProcessableTrait
                 ]
             );
         } catch (Exception $e) {
+            Log::error(
+                'Error authorization',
+                [ 'Error ' => $e->getMessage() ]
+            );
             $this->emailError($e, $emailName);
         }
     }
@@ -48,7 +55,7 @@ trait ProcessableTrait
      * @param string $emailName
      * @param string $token
      * @return void
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException
      */
     protected function chunkInputData($references, string $emailName, string $token)
     {
@@ -82,7 +89,7 @@ trait ProcessableTrait
                 'Error chunkInputData',
                 [ 'Error ' => $e->getMessage() ]
             );
-            $this->emailError($e, $emailName);
+            //$this->emailError($e, $emailName);
         }
     }
 
@@ -108,7 +115,7 @@ trait ProcessableTrait
     {
         foreach ($references as $data) {
             $response = $this->request($data, $emailName, $token);
-            $this->response($response, $data, count($references));
+            $this->response($response, count($references));
         }
     }
 
@@ -116,7 +123,7 @@ trait ProcessableTrait
      * @param object $data
      * @param string $emailName
      * @param string $token
-     * @return Exception|ResponseInterface
+     * @return Response|ResponseInterface
      * @throws GuzzleException
      */
     public function request(object $data, string $emailName, string $token)
@@ -155,58 +162,68 @@ trait ProcessableTrait
                             ]
                         ],
                         'invitations' => [
-                            [
-                                $data->invitations => null
-                            ]
+                            $data->invitations
                         ]
                     ]
                 ]
             );
         } catch (Exception $e) {
-            return $e;
+            return new Response(
+                400,
+                [],
+                json_encode(
+                    [
+                        'data' => [
+                            [
+                                'error' => $e
+                            ]
+                        ]
+                    ],
+                ),
+            );
         }
     }
 
     /**
      * @param $response
-     * @param $data
      * @param int $size
      * @return void
      */
-    public function response($response, $data, int $size)
+    public function response($response, int $size)
     {
-        $status = $response->getCode();
+        $status = $response->getStatusCode();
+        $response = json_decode($response->getBody()->getContents());
 
         switch ($status) {
             case 200:
                 $dataToken = [
-                    'token' => $response,
-                    'message' => $response,
-                    'idSubscriptions' => $response,
-                    'code' => $response->getStatusCode(),
-                    'error' => null
+                'token' => $response->data->token,
+                'message' => $response,
+                'idSubscriptions' => $response->data->id,
+                'code' => $status,
+                'error' => null
                 ];
                 break;
             case 422:
             case 401:
                 $dataToken = [
-                    'token' => null,
-                    'message' => $response->getMessage(),
-                    'idSubscriptions' => null,
-                    'code' => $status,
-                    'error' => $response->getResponse()
-                    ];
+                'token' => null,
+                'message' => null,
+                'idSubscriptions' => null,
+                'code' => $status,
+                'error' => $response->data->error
+                ];
                 break;
             default:
                 $dataToken = [
-                    'token' => null,
-                    'message' => $response,
-                    'idSubscriptions' => null,
-                    'code' =>  $status,
-                    'error' => 'not mapped error'
+                'token' => null,
+                'message' => $response,
+                'idSubscriptions' => null,
+                'code' =>  $status,
+                'error' => 'not mapped error'
                 ];
         }
-        $this->arrayInsert($dataToken, $size);
+            $this->arrayInsert($dataToken, $size);
     }
 
     /**
@@ -214,7 +231,7 @@ trait ProcessableTrait
      */
     private function getClient(): Client
     {
-        return new Client();
+        return app(ClientContract::class);
     }
 
     /**
@@ -224,17 +241,10 @@ trait ProcessableTrait
      */
     public function arrayInsert($data, int $size)
     {
-        try {
-            $this->datas[] = $data;
-            if (count($this->datas) === $size) {
-                Token::insert($this->datas);
-                $this->datas = [];
-            }
-        } catch (Exception $e) {
-            Log::error(
-                'Error arrayInsert',
-                [ 'Error ' => $e->getMessage() ]
-            );
+        $this->datas[] = $data;
+        if (count($this->datas) === $size) {
+            Token::insert($this->datas);
+            $this->datas = [];
         }
     }
 
@@ -245,7 +255,9 @@ trait ProcessableTrait
      */
     public function responseUpdate($response)
     {
-        $status = $response->getCode();
+        $status = $response->getStatusCode();
+        $response = json_decode($response->getBody()->getContents());
+
         switch ($status) {
             case 200:
                 return $response;
@@ -253,7 +265,7 @@ trait ProcessableTrait
             case 401:
             case 404:
                 return [
-                    'message' => $response->getMessage(),
+                    'message' => $response,
                     'code' => $status,
                     'error' => $response->getResponse()
                 ];
