@@ -23,12 +23,12 @@ class componentTest
                     'franchise' => 1,
                     'acquirerBIN' => 12345678910,
                     'version' => 2,
-                    'invitations' => null
+                    'invitations' => 'admin@admin.com'
                 ],
                 (object)[
                     'id' => 2,
                     'name' => 'EGM Ingenieria sin frondteras test ',
-                    'brand' => 'placetopay',
+                    'brand' => 'placetopay3',
                     'country' => 'COL',
                     'currency' => 'COP',
                     'type' => 'RUT',
@@ -51,12 +51,12 @@ class componentTest
         return [
             'id' => 1,
             'name' => 'EGM Ingenieria sin frondteras test three',
-            'brand' => 'placetopay',
+            'brand' => 'placetopay1',
             'country' => 'COL',
             'currency' => 'COP',
             'type' => 'RUT',
             'number' => '123456789-0',
-            'url' => 'https://www.placetopay.com',
+            'url' => 'https://www.placetopay2.com',
             'mcc' => 742,
             'isicClass' => 111,
             'nameBranch' => 'Oficina principal',
@@ -85,8 +85,8 @@ class componentTest
                     'brand' => 'placetopay test',
                     'country' => 'COL',
                     'currency' => 'COP',
-                    'url' => 'https://www.placetopay.com',
-                    'nameBranch' => 'Oficina principal',
+                    'url' => 'https://www.placetopay3.com',
+                    'nameBranch' => 'Oficina principal3',
                     'merchantID' => 1
                 ]
             ]

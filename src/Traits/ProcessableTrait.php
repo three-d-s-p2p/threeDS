@@ -6,7 +6,6 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Larangogon\ThreeDS\Contracts\ClientContract;
@@ -89,7 +88,6 @@ trait ProcessableTrait
                 'Error chunkInputData',
                 [ 'Error ' => $e->getMessage() ]
             );
-            //$this->emailError($e, $emailName);
         }
     }
 
