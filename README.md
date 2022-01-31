@@ -7,7 +7,7 @@
 ### Usage
 ### Methods
 ________________________________________________________
-###CreateOrUpdate
+### CreateOrUpdate
 ________________________________________________________
 #### The following parameters are required
 - data: one object :: information to process.
@@ -52,7 +52,7 @@ Update Merchant
 __________________________________________________
 ## Flowchart
 
-![img.png](img.png)
+![img_2.png](img_2.png)
 ______________________________________________________
 ___________________________________________________________
 ### createRequest
