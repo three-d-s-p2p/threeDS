@@ -19,7 +19,7 @@ class ProcessThreeDSCreateOrUpdate
      */
     public function createOrUpdate($data, string $token)
     {
-        if ($data->merchantID = ! null) {
+        if ($data->merchantID != null) {
             return $this->requestConnectionUpdate($data, $token);
         } else {
             return $this->requestConnectionCreate($data, $token);
