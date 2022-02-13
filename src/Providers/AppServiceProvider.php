@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../config' => config_path('/config'),
+                __DIR__ . '/../../config' => config_path('/config'),
             ],
             'threeds-config'
         );
@@ -39,11 +39,11 @@ class AppServiceProvider extends ServiceProvider
 
     private function loadMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         $this->publishes(
             [
-                __DIR__ . '/../database/migrations' => base_path('database/migrations'),
+                __DIR__ . '/../../database/migrations' => base_path('database/migrations'),
             ],
             'threeds-migrations'
         );
@@ -51,11 +51,11 @@ class AppServiceProvider extends ServiceProvider
 
     private function loadViews(): void
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', '/view');
+        $this->loadViewsFrom(__DIR__ . '/../../resources/views', '/view');
 
         $this->publishes(
             [
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/threeds'),
+                __DIR__ . '/../../resources/views' => resource_path('views/vendor/threeds'),
             ],
             'threeds-views'
         );
